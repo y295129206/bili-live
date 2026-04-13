@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bililive.mapper.VideoInfoFileMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.bililive.pojo.VideoInfoFile">
+        <result property="fileId" column="file_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="videoId" column="video_id"/>
+        <result property="fileName" column="file_name"/>
+        <result property="fileIndex" column="file_index"/>
+        <result property="fileSize" column="file_size"/>
+        <result property="filePath" column="file_path"/>
+        <result property="duration" column="duration"/>
+    </resultMap>
+
+    <!-- 基础字段列表 -->
+    <sql id="Base_Column_List">
+        file_id, user_id, video_id, file_name, file_index, file_size, file_path, duration
+    </sql>
+
+    <!-- 根据视频 ID 查询文件列表 -->
+    <select id="selectByVideoId" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM video_info_file
+        WHERE video_id = #{videoId}
+        ORDER BY file_index ASC
+    </select>
+
+    <!-- 根据文件 ID 查询文件信息 -->
+    <select id="getVideoInfoFileByFileId" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM video_info_file
+        WHERE file_id = #{fileId}
+    </select>
+
+    <!-- 根据查询条件获取文件列表 -->
+    <select id="selectList" parameterType="com.bililive.pojo.VideoInfoFileQuery" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM video_info_file
+        <where>
+            <if test="videoId != null and videoId != ''">
+                AND video_id = #{videoId}
+            </if>
+            <if test="fileIndex != null">
+                AND file_index = #{fileIndex}
+            </if>
+            <if test="uploadId != null and uploadId != ''">
+                AND upload_id = #{uploadId}
+            </if>
+            <if test="fileName != null and fileName != ''">
+                AND file_name LIKE CONCAT('%', #{fileName}, '%')
+            </if>
+            <if test="userId != null and userId != ''">
+                AND user_id = #{userId}
+            </if>
+            <if test="transferResult != null">
+                AND transfer_result = #{transferResult}
+            </if>
+        </where>
+        <if test="orderBy != null and orderBy != ''">
+            ORDER BY ${orderBy}
+        </if>
+    </select>
+
+    <!-- 插入视频文件信息 -->
+    <insert id="insert" parameterType="com.bililive.pojo.VideoInfoFile">
+        INSERT INTO video_info_file (
+            file_id,
+            user_id,
+            video_id,
+            file_name,
+            file_index,
+            file_size,
+            file_path,
+            duration
+        ) VALUES (
+            #{fileId},
+            #{userId},
+            #{videoId},
+            #{fileName},
+            #{fileIndex},
+            #{fileSize},
+            #{filePath},
+            #{duration}
+        )
+    </insert>
+
+    <!-- 根据视频 ID 删除文件信息 -->
+    <delete id="deleteByVideoId" parameterType="string">
+        DELETE FROM video_info_file WHERE video_id = #{videoId}
+    </delete>
+
+    <!-- 根据上传 ID 删除文件信息 -->
+    <delete id="deleteByUploadId" parameterType="string">
+        DELETE FROM video_info_file WHERE upload_id = #{uploadId}
+    </delete>
+
+    <!-- 根据视频 ID 和文件索引删除文件信息 -->
+    <delete id="deleteByVideoIdAndIndex">
+        DELETE FROM video_info_file 
+        WHERE video_id = #{videoId} AND file_index = #{fileIndex}
+    </delete>
+
+    <!-- 获取文件总数 -->
+    <select id="selectCount" parameterType="com.bililive.pojo.VideoInfoFileQuery" resultType="int">
+        SELECT COUNT(*) FROM video_info_file
+        <where>
+            <if test="videoId != null and videoId != ''">
+                AND video_id = #{videoId}
+            </if>
+            <if test="fileIndex != null">
+                AND file_index = #{fileIndex}
+            </if>
+            <if test="uploadId != null and uploadId != ''">
+                AND upload_id = #{uploadId}
+            </if>
+            <if test="fileName != null and fileName != ''">
+                AND file_name LIKE CONCAT('%', #{fileName}, '%')
+            </if>
+            <if test="userId != null and userId != ''">
+                AND user_id = #{userId}
+            </if>
+            <if test="transferResult != null">
+                AND transfer_result = #{transferResult}
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据上传 ID 和用户 ID 更新文件信息 -->
+    <update id="updateByUploadIdAndUserId">
+        UPDATE video_info_file SET 1=1 WHERE 1=0
+    </update>
+
+    <!-- 根据查询条件更新视频文件信息 -->
+    <update id="updateByParam">
+        UPDATE video_info_file SET 1=1 WHERE 1=0
+    </update>
+
+    <!-- 根据查询条件删除视频文件信息 -->
+    <delete id="deleteByParam" parameterType="com.bililive.pojo.VideoInfoFileQuery">
+        DELETE FROM video_info_file
+        <where>
+            <if test="videoId != null and videoId != ''">
+                AND video_id = #{videoId}
+            </if>
+            <if test="userId != null and userId != ''">
+                AND user_id = #{userId}
+            </if>
+            <if test="fileIndex != null">
+                AND file_index = #{fileIndex}
+            </if>
+        </where>
+    </delete>
+
+    <!-- 批量插入视频文件信息 -->
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO video_info_file (
+            file_id,
+            user_id,
+            video_id,
+            file_name,
+            file_index,
+            file_size,
+            file_path,
+            duration
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+                #{item.fileId},
+                #{item.userId},
+                #{item.videoId},
+                #{item.fileName},
+                #{item.fileIndex},
+                #{item.fileSize},
+                #{item.filePath},
+                #{item.duration}
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+            user_id = VALUES(user_id),
+            video_id = VALUES(video_id),
+            file_name = VALUES(file_name),
+            file_index = VALUES(file_index),
+            file_size = VALUES(file_size),
+            file_path = VALUES(file_path),
+            duration = VALUES(duration)
+    </insert>
+
+</mapper>

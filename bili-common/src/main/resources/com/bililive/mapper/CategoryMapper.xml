@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bililive.mapper.CategoryMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.bililive.pojo.CategoryInfo">
+        <id property="categoryId" column="category_id"/>
+        <result property="categoryCode" column="category_code"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="pCategoryId" column="p_category_id"/>
+        <result property="icon" column="icon"/>
+        <result property="background" column="background"/>
+        <result property="sort" column="sort"/>
+    </resultMap>
+
+    <!-- 树形结构结果映射 -->
+    <resultMap id="TreeResultMap" type="com.bililive.pojo.CategoryInfo" extends="BaseResultMap">
+        <collection property="children" ofType="com.bililive.pojo.CategoryInfo"
+                   select="selectChildren" column="category_id"/>
+    </resultMap>
+
+    <!-- 基础字段列表 -->
+    <sql id="Base_Column_List">
+        category_id, category_code, category_name, p_category_id, icon, background, sort
+    </sql>
+
+    <!-- 插入分类信息 -->
+    <insert id="insert" parameterType="com.bililive.pojo.CategoryInfo" useGeneratedKeys="true" keyProperty="categoryId">
+        INSERT INTO category_info (
+            category_code,
+            category_name,
+            p_category_id,
+            icon,
+            background,
+            sort
+        ) VALUES (
+            #{categoryCode},
+            #{categoryName},
+            #{pCategoryId},
+            #{icon,jdbcType=VARCHAR},
+            #{background,jdbcType=VARCHAR},
+            #{sort}
+        )
+    </insert>
+
+    <!-- 根据分类ID更新分类信息 -->
+    <update id="updateByCategoryId" parameterType="com.bililive.pojo.CategoryInfo">
+        UPDATE category_info
+        <set>
+            <if test="categoryCode != null and categoryCode != ''">category_code = #{categoryCode},</if>
+            <if test="categoryName != null and categoryName != ''">category_name = #{categoryName},</if>
+            <if test="pCategoryId != null">p_category_id = #{pCategoryId},</if>
+            <if test="icon != null">icon = #{icon},</if>
+            <if test="background != null">background = #{background},</if>
+            <if test="sort != null">sort = #{sort},</if>
+        </set>
+        WHERE category_id = #{categoryId}
+    </update>
+
+    <!-- 根据分类ID删除分类 -->
+    <delete id="deleteByCategoryId" parameterType="int">
+        DELETE FROM category_info WHERE category_id = #{categoryId}
+    </delete>
+
+    <!-- 查询子分类 -->
+    <select id="selectChildren" parameterType="int" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM category_info
+        WHERE p_category_id = #{categoryId}
+        ORDER BY sort ASC, category_id ASC
+    </select>
+
+    <!-- 根据父分类ID获取子分类列表 -->
+    <select id="selectByParentId" parameterType="int" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM category_info
+        WHERE p_category_id = #{pCategoryId}
+        ORDER BY sort ASC, category_id ASC
+    </select>
+
+    <!-- 根据查询条件获取分类列表（树形结构） -->
+    <select id="selectList" parameterType="com.bililive.pojo.CategoryInfoQuery" resultMap="TreeResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM category_info
+        <where>
+            <!-- 一级分类条件：p_category_id为0或null -->
+            <if test="pCategoryId == null or pCategoryId == 0">
+                AND (p_category_id = 0 OR p_category_id IS NULL)
+            </if>
+            <if test="categoryId != null">
+                AND category_id = #{categoryId}
+            </if>
+            <if test="categoryCode != null and categoryCode != ''">
+                AND category_code LIKE CONCAT('%', #{categoryCode}, '%')
+            </if>
+            <if test="categoryName != null and categoryName != ''">
+                AND category_name LIKE CONCAT('%', #{categoryName}, '%')
+            </if>
+            <if test="pCategoryId != null and pCategoryId > 0">
+                AND p_category_id = #{pCategoryId}
+            </if>
+            <if test="sort != null">
+                AND sort = #{sort}
+            </if>
+        </where>
+        ORDER BY sort ASC, category_id ASC
+    </select>
+
+    <!-- 获取所有一级分类（用于前端展示） -->
+    <select id="selectTopLevelCategories" resultMap="TreeResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM category_info
+        WHERE p_category_id = 0 OR p_category_id IS NULL
+        ORDER BY sort ASC, category_id ASC
+    </select>
+
+    <!-- 获取分类总数 -->
+    <select id="selectCount" parameterType="com.bililive.pojo.CategoryInfoQuery" resultType="int">
+        SELECT COUNT(*) FROM category_info
+        <where>
+            <if test="categoryId != null">
+                AND category_id = #{categoryId}
+            </if>
+            <if test="categoryCode != null and categoryCode != ''">
+                AND category_code LIKE CONCAT('%', #{categoryCode}, '%')
+            </if>
+            <if test="categoryName != null and categoryName != ''">
+                AND category_name LIKE CONCAT('%', #{categoryName}, '%')
+            </if>
+            <if test="pCategoryId != null">
+                AND p_category_id = #{pCategoryId}
+            </if>
+            <if test="sort != null">
+                AND sort = #{sort}
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bililive.mapper.VideoInfoMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.bililive.pojo.VideoInfo">
+        <id property="videoId" column="video_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="videoName" column="video_name"/>
+        <result property="videoCover" column="video_cover"/>
+        <result property="introduction" column="introduction"/>
+        <result property="duration" column="duration"/>
+        <result property="tags" column="tags"/>
+        <result property="pCategoryId" column="p_category_id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="postType" column="post_type"/>
+        <result property="originInfo" column="origin_info"/>
+        <result property="interaction" column="interaction"/>
+        <result property="lastPlayTime" column="last_play_time"/>
+        <result property="recommendType" column="recommend_type"/>
+        <result property="playCount" column="play_count"/>
+        <result property="likeCount" column="like_count"/>
+        <result property="coinCount" column="coin_count"/>
+        <result property="collectCount" column="collect_count"/>
+        <result property="commentCount" column="comment_count"/>
+        <result property="danmuCount" column="danmu_count"/>
+        <result property="createTime" column="create_time"/>
+        <result property="lastUpdateTime" column="last_update_time"/>
+    </resultMap>
+
+    <!-- 基础字段列表 -->
+    <sql id="Base_Column_List">
+        v.video_id, v.user_id, v.video_name, v.video_cover, v.introduction, v.duration, v.tags, 
+        v.p_category_id, v.category_id, v.post_type, v.origin_info, v.interaction, 
+        v.last_play_time, v.recommend_type, v.play_count, v.like_count, v.coin_count, 
+        v.collect_count, v.comment_count, v.danmu_count, v.create_time, v.last_update_time
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="query_condition">
+        <where>
+            <if test="query.userId != null and query.userId != ''">
+                AND v.user_id = #{query.userId}
+            </if>
+            <if test="query.videoId != null and query.videoId != ''">
+                AND v.video_id = #{query.videoId}
+            </if>
+            <if test="query.videoNameFuzzy != null and query.videoNameFuzzy != ''">
+                AND v.video_name LIKE CONCAT('%', #{query.videoNameFuzzy}, '%')
+            </if>
+            <if test="query.pCategoryId != null">
+                AND v.p_category_id = #{query.pCategoryId}
+            </if>
+            <if test="query.categoryId != null">
+                AND v.category_id = #{query.categoryId}
+            </if>
+            <if test="query.postType != null">
+                AND v.post_type = #{query.postType}
+            </if>
+            <if test="query.duration != null">
+                AND v.duration = #{query.duration}
+            </if>
+            <if test="query.recommendType != null">
+                AND v.recommend_type = #{query.recommendType}
+            </if>
+            <if test="query.videoIdArray != null and query.videoIdArray.length>0">
+                AND v.video_id IN
+                <foreach collection="query.videoIdArray" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="query.excludeVideoIdArray != null and query.excludeVideoIdArray.length>0">
+                AND v.video_id NOT IN
+                <foreach collection="query.excludeVideoIdArray" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="query.lastPlayHour!=null">
+                <![CDATA[and v.last_play_time >= DATE_SUB(NOW(), INTERVAL #{query.lastPlayHour} HOUR) ]]>
+            </if>
+            <if test="query.categoryIdOrPCategoryId!=null">
+                AND v.category_id = #{query.categoryIdOrPCategoryId} OR v.p_category_id = #{query.categoryIdOrPCategoryId}
+            </if>
+        </where>
+    </sql>
+    <!-- 根据视频 ID 查询视频信息 -->
+    <select id="selectByVideoId" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM video_info v
+        WHERE v.video_id = #{videoId}
+    </select>
+
+    <!-- 插入视频信息 -->
+    <insert id="insert" parameterType="com.bililive.pojo.VideoInfo">
+        INSERT INTO video_info (
+            video_id,
+            user_id,
+            video_name,
+            video_cover,
+            introduction,
+            duration,
+            tags,
+            p_category_id,
+            category_id,
+            post_type,
+            origin_info,
+            interaction,
+            last_play_time,
+            recommend_type,
+            play_count,
+            like_count,
+            coin_count,
+            collect_count,
+            comment_count,
+            danmu_count,
+            create_time,
+            last_update_time
+        ) VALUES (
+            #{videoId},
+            #{userId},
+            #{videoName},
+            #{videoCover},
+            #{introduction},
+            #{duration},
+            #{tags},
+            #{pCategoryId},
+            #{categoryId},
+            #{postType},
+            #{originInfo},
+            #{interaction},
+            #{lastPlayTime},
+            #{recommendType},
+            #{playCount},
+            #{likeCount},
+            #{coinCount},
+            #{collectCount},
+            #{commentCount},
+            #{danmuCount},
+            #{createTime},
+            #{lastUpdateTime}
+        )
+    </insert>
+
+    <!-- 根据视频 ID 更新视频信息 -->
+    <update id="updateByVideoId" parameterType="com.bililive.pojo.VideoInfo">
+        UPDATE video_info
+        <set>
+            <if test="videoInfo.videoName != null">video_name = #{videoInfo.videoName},</if>
+            <if test="videoInfo.videoCover != null">video_cover = #{videoInfo.videoCover},</if>
+            <if test="videoInfo.introduction != null">introduction = #{videoInfo.introduction},</if>
+            <if test="videoInfo.duration != null">duration = #{videoInfo.duration},</if>
+            <if test="videoInfo.tags != null">tags = #{videoInfo.tags},</if>
+            <if test="videoInfo.pCategoryId != null">p_category_id = #{videoInfo.pCategoryId},</if>
+            <if test="videoInfo.categoryId != null">category_id = #{videoInfo.categoryId},</if>
+            <if test="videoInfo.postType != null">post_type = #{videoInfo.postType},</if>
+            <if test="videoInfo.originInfo != null">origin_info = #{videoInfo.originInfo},</if>
+            <if test="videoInfo.interaction != null">interaction = #{videoInfo.interaction},</if>
+            <if test="videoInfo.lastPlayTime != null">last_play_time = #{videoInfo.lastPlayTime},</if>
+            <if test="videoInfo.recommendType != null">recommend_type = #{videoInfo.recommendType},</if>
+            <if test="videoInfo.playCount != null">play_count = #{videoInfo.playCount},</if>
+            <if test="videoInfo.likeCount != null">like_count = #{videoInfo.likeCount},</if>
+            <if test="videoInfo.coinCount != null">coin_count = #{videoInfo.coinCount},</if>
+            <if test="videoInfo.collectCount != null">collect_count = #{videoInfo.collectCount},</if>
+            <if test="videoInfo.commentCount != null">comment_count = #{videoInfo.commentCount},</if>
+            <if test="videoInfo.danmuCount != null">danmu_count = #{videoInfo.danmuCount},</if>
+            <if test="videoInfo.lastUpdateTime != null">last_update_time = #{videoInfo.lastUpdateTime},</if>
+        </set>
+        WHERE video_id = #{videoId}
+    </update>
+
+    <!-- 删除视频信息 -->
+    <delete id="deleteByVideoId" parameterType="string">
+        DELETE FROM video_info WHERE video_id = #{videoId}
+    </delete>
+
+    <!-- 插入或更新视频信息 -->
+    <insert id="insertOrUpdate" parameterType="com.bililive.pojo.VideoInfo">
+        INSERT INTO video_info (
+            video_id,
+            user_id,
+            video_name,
+            video_cover,
+            introduction,
+            duration,
+            tags,
+            p_category_id,
+            category_id,
+            post_type,
+            origin_info,
+            interaction,
+            last_play_time,
+            recommend_type,
+            play_count,
+            like_count,
+            coin_count,
+            collect_count,
+            comment_count,
+            danmu_count,
+            create_time,
+            last_update_time
+        ) VALUES (
+            #{videoId},
+            #{userId},
+            #{videoName},
+            #{videoCover},
+            #{introduction},
+            #{duration},
+            #{tags},
+            #{pCategoryId},
+            #{categoryId},
+            #{postType},
+            #{originInfo},
+            #{interaction},
+            #{lastPlayTime},
+            #{recommendType},
+            #{playCount},
+            #{likeCount},
+            #{coinCount},
+            #{collectCount},
+            #{commentCount},
+            #{danmuCount},
+            #{createTime},
+            #{lastUpdateTime}
+        )
+        ON DUPLICATE KEY UPDATE
+        user_id = VALUES(user_id),
+        video_name = VALUES(video_name),
+        video_cover = VALUES(video_cover),
+        introduction = VALUES(introduction),
+        duration = VALUES(duration),
+        tags = VALUES(tags),
+        p_category_id = VALUES(p_category_id),
+        category_id = VALUES(category_id),
+        post_type = VALUES(post_type),
+        origin_info = VALUES(origin_info),
+        interaction = VALUES(interaction),
+        last_play_time = VALUES(last_play_time),
+        recommend_type = VALUES(recommend_type),
+        play_count = VALUES(play_count),
+        like_count = VALUES(like_count),
+        coin_count = VALUES(coin_count),
+        collect_count = VALUES(collect_count),
+        comment_count = VALUES(comment_count),
+        danmu_count = VALUES(danmu_count),
+        last_update_time = VALUES(last_update_time)
+    </insert>
+
+    <!-- 根据查询条件获取视频列表 -->
+    <select id="selectList" parameterType="com.bililive.pojo.VideoInfoQuery" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        <if test="query.queryUserInfo">
+            ,u.nick_name,u.avatar
+        </if>
+        FROM video_info v
+        <if test="query.queryUserInfo">
+            LEFT JOIN user_info u ON v.user_id = u.user_id
+        </if>
+        <include refid="query_condition"></include>
+        <if test="query.orderBy != null and query.orderBy != ''">
+            ORDER BY ${query.orderBy}
+        </if>
+        <if test="query.simplePage!=null">
+            LIMIT #{query.simplePage.start}, #{query.simplePage.pageSize}
+        </if>
+    </select>
+
+    <!-- 根据查询条件获取视频总数 -->
+    <select id="selectCount" parameterType="com.bililive.pojo.VideoInfoQuery" resultType="int">
+        SELECT COUNT(*) FROM video_info v
+        <if test="query.queryUserInfo">
+            LEFT JOIN user_info u ON v.user_id = u.user_id
+        </if>
+        <include refid="query_condition"/>
+    </select>
+    <select id="selectSumCountInfo" resultType="com.bililive.pojo.UserCountInfoDto">
+        SELECT IFNULL(SUM(play_count),0) playCount,IFNULL(SUM(like_count),0) likeCount from video_info
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- 更新视频数量统计信息 -->
+    <update id="updateCountInfo">
+        UPDATE video_info
+        <set>
+            ${field} = ${field} + #{changeCount}
+        </set>
+        <if test="field=='play_count'">
+            ,last_play_time = now()
+        </if>
+        WHERE video_id = #{videoId}
+    </update>
+
+    <!-- 根据查询条件更新视频信息 -->
+    <update id="updateByParam">
+        UPDATE video_info
+        <set>
+            <if test="videoInfo.videoName != null and videoInfo.videoName != ''">video_name = #{videoInfo.videoName},</if>
+            <if test="videoInfo.videoCover != null and videoInfo.videoCover != ''">video_cover = #{videoInfo.videoCover},</if>
+            <if test="videoInfo.introduction != null">introduction = #{videoInfo.introduction},</if>
+            <if test="videoInfo.duration != null">duration = #{videoInfo.duration},</if>
+            <if test="videoInfo.tags != null">tags = #{videoInfo.tags},</if>
+            <if test="videoInfo.pCategoryId != null">p_category_id = #{videoInfo.pCategoryId},</if>
+            <if test="videoInfo.categoryId != null">category_id = #{videoInfo.categoryId},</if>
+            <if test="videoInfo.postType != null">post_type = #{videoInfo.postType},</if>
+            <if test="videoInfo.originInfo != null">origin_info = #{videoInfo.originInfo},</if>
+            <if test="videoInfo.interaction != null">interaction = #{videoInfo.interaction},</if>
+            <if test="videoInfo.lastPlayTime != null">last_play_time = #{videoInfo.lastPlayTime},</if>
+            <if test="videoInfo.recommendType != null">recommend_type = #{videoInfo.recommendType},</if>
+            <if test="videoInfo.playCount != null">play_count = #{videoInfo.playCount},</if>
+            <if test="videoInfo.likeCount != null">like_count = #{videoInfo.likeCount},</if>
+            <if test="videoInfo.coinCount != null">coin_count = #{videoInfo.coinCount},</if>
+            <if test="videoInfo.collectCount != null">collect_count = #{videoInfo.collectCount},</if>
+            <if test="videoInfo.commentCount != null">comment_count = #{videoInfo.commentCount},</if>
+            <if test="videoInfo.danmuCount != null">danmu_count = #{videoInfo.danmuCount},</if>
+            <if test="videoInfo.lastUpdateTime != null">last_update_time = #{videoInfo.lastUpdateTime},</if>
+        </set>
+        <where>
+            <if test="query.videoId != null and query.videoId != ''">
+                AND video_id = #{query.videoId}
+            </if>
+            <if test="query.userId != null and query.userId != ''">
+                AND user_id = #{query.userId}
+            </if>
+            <if test="query.status != null">
+                AND status = #{query.status}
+            </if>
+        </where>
+    </update>
+
+</mapper>

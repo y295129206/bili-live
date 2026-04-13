@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bililive.mapper.UserActionMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.bililive.pojo.UserAction">
+        <id property="actionId" column="action_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="videoId" column="video_id"/>
+        <result property="actionType" column="action_type"/>
+        <result property="actionCount" column="action_count"/>
+        <result property="commentId" column="comment_id"/>
+        <result property="videoUserId" column="video_user_id"/>
+        <result property="actionTime" column="action_time"/>
+    </resultMap>
+
+    <!-- 基础字段列表 -->
+    <sql id="Base_Column_List">
+        action_id, user_id, video_id, action_type, action_count, comment_id, 
+        video_user_id, action_time
+    </sql>
+
+    <!-- 插入用户行为记录 -->
+    <insert id="insert" parameterType="com.bililive.pojo.UserAction">
+        INSERT INTO user_action (
+            user_id,
+            video_id,
+            action_type,
+            action_count,
+            comment_id,
+            video_user_id,
+            action_time
+        ) VALUES (
+            #{userId},
+            #{videoId},
+            #{actionType},
+            #{actionCount},
+            #{commentId},
+            #{videoUserId},
+            #{actionTime}
+        )
+    </insert>
+
+    <!-- 根据用户 ID、视频 ID 和行为类型查询用户行为 -->
+    <select id="selectByUserIdAndVideoIdAndActionType" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_action
+        WHERE user_id = #{userId}
+          AND video_id = #{videoId}
+          AND action_type = #{actionType}
+    </select>
+
+    <!-- 根据用户 ID、视频 ID、行为类型和评论 ID 查询用户行为 -->
+    <select id="selectByUserIdAndVideoIdAndActionTypeAndCommentId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_action
+        WHERE user_id = #{userId}
+          AND video_id = #{videoId}
+          AND action_type = #{actionType}
+          AND comment_id = #{commentId}
+    </select>
+
+    <!-- 根据行为 ID 更新用户行为记录 -->
+    <update id="updateByActionId">
+        UPDATE user_action
+        SET action_time = NOW()
+        WHERE action_id = #{actionId}
+    </update>
+
+    <!-- 根据行为 ID 删除用户行为记录 -->
+    <delete id="deleteByActionId" parameterType="int">
+        DELETE FROM user_action WHERE action_id = #{actionId}
+    </delete>
+
+    <!-- 查询条件 -->
+    <sql id="query_condition">
+        <where>
+            <if test="query.userId != null and query.userId != ''">
+                AND a.user_id = #{query.userId}
+            </if>
+            <if test="query.userIdFuzzy != null and query.userIdFuzzy != ''">
+                AND a.user_id LIKE CONCAT('%', #{query.userIdFuzzy}, '%')
+            </if>
+            <if test="query.videoId != null and query.videoId != ''">
+                AND a.video_id = #{query.videoId}
+            </if>
+            <if test="query.actionTypeArray != null and query.actionTypeArray.length > 0">
+                AND a.action_type IN
+                <foreach collection="query.actionTypeArray" item="actionType" open="(" separator="," close=")">
+                    #{actionType}
+                </foreach>
+            </if>
+            <if test="query.commentId != null">
+                AND a.comment_id = #{query.commentId}
+            </if>
+            <if test="query.videoUserId != null and query.videoUserId != ''">
+                AND a.video_user_id = #{query.videoUserId}
+            </if>
+            <if test="query.actionTimeStart != null and query.actionTimeStart != ''">
+                AND a.action_time &gt;= #{query.actionTimeStart}
+            </if>
+            <if test="query.actionTimeEnd != null and query.actionTimeEnd != ''">
+                AND a.action_time &lt;= #{query.actionTimeEnd}
+            </if>
+            <if test="query.actionTypeArray !=null and query.actionTypeArray.length>0">
+                and a.action_type in
+                <foreach collection="query.actionTypeArray" item="actionType" open="(" separator="," close=")">
+                    #{actionType}
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
+    <!-- 根据查询条件获取用户行为列表 -->
+    <select id="selectList" parameterType="com.bililive.pojo.UserActionQuery" resultMap="BaseResultMap">
+        SELECT
+        a.action_id, a.user_id, a.video_id, a.action_type, a.action_count, a.comment_id,
+        a.video_user_id, a.action_time
+        <if test="query.queryVideoInfo">
+            ,v.video_cover videoCover,v.video_name videoName
+        </if>
+        FROM user_action a
+        <if test="query.queryVideoInfo">
+            LEFT JOIN video_info v ON a.video_id = v.video_id
+        </if>
+        <include refid="query_condition"/>
+        <if test="query.orderBy != null and query.orderBy != ''">
+            ORDER BY ${query.orderBy}
+        </if>
+        <if test="query.simplePage!=null">
+            LIMIT #{query.simplePage.start}, #{query.simplePage.pageSize}
+        </if>
+    </select>
+
+    <!-- 根据查询条件统计用户行为总数 -->
+    <select id="selectCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM user_action a
+        <include refid="query_condition"></include>
+    </select>
+
+</mapper>

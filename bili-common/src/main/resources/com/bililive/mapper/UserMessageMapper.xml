@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bililive.mapper.UserMessageMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.bililive.pojo.UserMessage">
+        <id property="messageId" column="message_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="videoId" column="video_id"/>
+        <result property="messageType" column="message_type"/>
+        <result property="sendUserId" column="send_user_id"/>
+        <result property="readType" column="read_type"/>
+        <result property="createTime" column="create_time"/>
+        <result property="extendJson" column="extend_json"/>
+    </resultMap>
+
+    <!-- 基础字段列表 -->
+    <sql id="Base_Column_List">
+        message_id, user_id, video_id, message_type, send_user_id, 
+        read_type, create_time, extend_json
+    </sql>
+
+    <!-- 插入消息记录 -->
+    <insert id="insert" parameterType="com.bililive.pojo.UserMessage" useGeneratedKeys="true" keyProperty="messageId">
+        INSERT INTO user_message (
+            user_id,
+            video_id,
+            message_type,
+            send_user_id,
+            read_type,
+            create_time,
+            extend_json
+        ) VALUES (
+            #{userId},
+            #{videoId},
+            #{messageType},
+            #{sendUserId},
+            #{readType},
+            #{createTime},
+            #{extendJson}
+        )
+    </insert>
+
+    <!-- 根据消息ID查询消息 -->
+    <select id="selectByMessageId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_message
+        WHERE message_id = #{messageId}
+    </select>
+
+    <!-- 根据消息ID删除消息 -->
+    <delete id="deleteByMessageId">
+        DELETE FROM user_message 
+        WHERE message_id = #{messageId}
+          AND user_id = #{userId}
+    </delete>
+
+    <!-- 批量删除消息 -->
+    <delete id="deleteBatchByMessageId">
+        DELETE FROM user_message 
+        WHERE user_id = #{userId}
+          AND message_id IN
+        <foreach collection="messageIdList" item="messageId" open="(" separator="," close=")">
+            #{messageId}
+        </foreach>
+    </delete>
+
+    <!-- 标记消息为已读 -->
+    <update id="updateReadType">
+        UPDATE user_message
+        SET read_type = 1
+        WHERE message_id = #{messageId}
+          AND user_id = #{userId}
+    </update>
+
+    <!-- 批量标记消息为已读 -->
+    <update id="updateReadTypeBatch">
+        UPDATE user_message
+        SET read_type = 1
+        WHERE user_id = #{userId}
+          AND read_type = 0
+        <if test="messageType != null">
+          AND message_type = #{messageType}
+        </if>
+    </update>
+
+    <!-- 查询条件 -->
+    <sql id="query_condition">
+        <where>
+            <if test="query.userId != null and query.userId != ''">
+                AND m.user_id = #{query.userId}
+            </if>
+            <if test="query.messageId != null">
+                AND m.message_id = #{query.messageId}
+            </if>
+            <if test="query.videoId != null and query.videoId != ''">
+                AND m.video_id = #{query.videoId}
+            </if>
+            <if test="query.messageType != null">
+                AND m.message_type = #{query.messageType}
+            </if>
+            <if test="query.sendUserId != null and query.sendUserId != ''">
+                AND m.send_user_id = #{query.sendUserId}
+            </if>
+            <if test="query.readType != null">
+                AND m.read_type = #{query.readType}
+            </if>
+            <if test="query.createTimeStart != null">
+                AND m.create_time &gt;= #{query.createTimeStart}
+            </if>
+            <if test="query.createTimeEnd != null">
+                AND m.create_time &lt;= #{query.createTimeEnd}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 根据查询条件获取消息列表 -->
+    <select id="selectList" parameterType="com.bililive.pojo.UserMessageQuery" resultMap="BaseResultMap">
+        SELECT
+        m.message_id, m.user_id, m.video_id, m.message_type, m.send_user_id,
+        m.read_type, m.create_time, m.extend_json,
+        user.avatar sendUserAvatar, user.nick_name sendUserName, v.video_name, v.video_cover
+        FROM user_message m
+        LEFT JOIN video_info v ON m.video_id = v.video_id
+        LEFT JOIN user_info user ON m.send_user_id = user.user_id
+        <include refid="query_condition"/>
+        <if test="query.orderBy != null and query.orderBy != ''">
+            ORDER BY ${query.orderBy}
+        </if>
+        <if test="query.simplePage!=null">
+            LIMIT #{query.simplePage.start}, #{query.simplePage.pageSize}
+        </if>
+    </select>
+
+    <!-- 根据查询条件统计消息总数 -->
+    <select id="selectCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM user_message m
+        <include refid="query_condition"></include>
+    </select>
+
+    <select id="getMessageTypeNoReadCount" resultType="com.bililive.pojo.UserMessageCountDto">
+        SELECT
+            message_type AS messageType,
+            COUNT(*) AS messageCount
+        FROM user_message
+        WHERE user_id = #{userId}
+          AND read_type = 0
+        GROUP BY message_type
+    </select>
+
+    <!-- 根据查询条件更新消息 -->
+    <update id="updateByParam">
+        UPDATE user_message
+        <set>
+            <if test="userMessage.readType != null">
+                read_type = #{userMessage.readType},
+            </if>
+        </set>
+        <where>
+            <if test="query.userId != null and query.userId != ''">
+                AND user_id = #{query.userId}
+            </if>
+            <if test="query.messageType != null">
+                AND message_type = #{query.messageType}
+            </if>
+            <if test="query.videoId != null and query.videoId != ''">
+                AND video_id = #{query.videoId}
+            </if>
+            <if test="query.sendUserId != null and query.sendUserId != ''">
+                AND send_user_id = #{query.sendUserId}
+            </if>
+        </where>
+    </update>
+
+    <!-- 根据查询条件删除消息 -->
+    <delete id="deleteByParam">
+        DELETE FROM user_message
+        <where>
+            <if test="query.userId != null and query.userId != ''">
+                AND user_id = #{query.userId}
+            </if>
+            <if test="query.messageId != null">
+                AND message_id = #{query.messageId}
+            </if>
+        </where>
+    </delete>
+
+</mapper>

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bililive.mapper.VideoInfoPostMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.bililive.pojo.VideoInfoPost">
+        <id property="videoId" column="video_id"/>
+        <result property="videoCover" column="video_cover"/>
+        <result property="videoName" column="video_name"/>
+        <result property="pCategoryId" column="p_category_id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="postType" column="post_type"/>
+        <result property="tags" column="tags"/>
+        <result property="introduction" column="introduction"/>
+        <result property="interaction" column="interaction"/>
+        <result property="userId" column="user_id"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="lastUpdateTime" column="last_update_time"/>
+        <result property="duration" column="duration"/>
+        <result property="playCount" column="play_count"/>
+        <result property="likeCount" column="like_count"/>
+        <result property="coinCount" column="coin_count"/>
+        <result property="collectCount" column="collect_count"/>
+        <result property="commentCount" column="comment_count"/>
+        <result property="danmuCount" column="danmu_count"/>
+        <result property="recommendType" column="recommend_type"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="avatar" column="avatar"/>
+    </resultMap>
+
+    <!-- 基础字段列表 -->
+    <sql id="Base_Column_List">
+        v.video_id, v.video_cover, v.video_name, v.p_category_id, v.category_id, v.post_type, v.tags, 
+        v.introduction, v.interaction, v.user_id, v.status, v.create_time, v.last_update_time, v.duration
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="query_condition">
+        <where>
+            <if test="query.userId != null and query.userId != ''">
+                AND v.user_id = #{query.userId}
+            </if>
+            <if test="query.videoId != null and query.videoId != ''">
+                AND v.video_id = #{query.videoId}
+            </if>
+            <if test="query.videoNameFuzzy != null and query.videoNameFuzzy != ''">
+                AND v.video_name LIKE CONCAT('%', #{query.videoNameFuzzy}, '%')
+            </if>
+            <if test="query.pCategoryId != null">
+                AND v.p_category_id = #{query.pCategoryId}
+            </if>
+            <if test="query.categoryId != null">
+                AND v.category_id = #{query.categoryId}
+            </if>
+            <if test="query.postType != null">
+                AND v.post_type = #{query.postType}
+            </if>
+            <if test="query.status != null">
+                AND v.status = #{query.status}
+            </if>
+            <if test="query.duration != null">
+                AND v.duration = #{query.duration}
+            </if>
+            <if test="query.excludeStatusArray != null and query.excludeStatusArray.length > 0">
+                AND v.status NOT IN
+                <foreach collection="query.excludeStatusArray" item="status" open="(" separator="," close=")">
+                    #{status}
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
+    <!-- 根据视频 ID 查询视频信息 -->
+    <select id="selectByVideoId" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM video_info_post v
+        WHERE v.video_id = #{videoId}
+    </select>
+
+    <!-- 插入视频发布信息 -->
+    <insert id="insert" parameterType="com.bililive.pojo.VideoInfoPost">
+        INSERT INTO video_info_post (
+            video_id,
+            video_cover,
+            video_name,
+            p_category_id,
+            category_id,
+            post_type,
+            tags,
+            introduction,
+            interaction,
+            user_id,
+            status,
+            create_time,
+            last_update_time
+        ) VALUES (
+            #{videoId},
+            #{videoCover},
+            #{videoName},
+            #{pCategoryId},
+            #{categoryId},
+            #{postType},
+            #{tags},
+            #{introduction},
+            #{interaction},
+            #{userId},
+            #{status},
+            #{createTime},
+            #{lastUpdateTime}
+        )
+    </insert>
+
+    <!-- 更新视频发布信息 -->
+    <update id="updateByVideoId" parameterType="com.bililive.pojo.VideoInfoPost">
+        UPDATE video_info_post
+        <set>
+            <if test="videoInfoPost.videoCover != null">video_cover = #{videoInfoPost.videoCover},</if>
+            <if test="videoInfoPost.videoName != null">video_name = #{videoInfoPost.videoName},</if>
+            <if test="videoInfoPost.pCategoryId != null">p_category_id = #{videoInfoPost.pCategoryId},</if>
+            <if test="videoInfoPost.categoryId != null">category_id = #{videoInfoPost.categoryId},</if>
+            <if test="videoInfoPost.postType != null">post_type = #{videoInfoPost.postType},</if>
+            <if test="videoInfoPost.tags != null">tags = #{videoInfoPost.tags},</if>
+            <if test="videoInfoPost.introduction != null">introduction = #{videoInfoPost.introduction},</if>
+            <if test="videoInfoPost.interaction != null">interaction = #{videoInfoPost.interaction},</if>
+            <if test="videoInfoPost.userId != null">user_id = #{videoInfoPost.userId},</if>
+            <if test="videoInfoPost.status != null">status = #{videoInfoPost.status},</if>
+            <if test="videoInfoPost.lastUpdateTime != null">last_update_time = #{videoInfoPost.lastUpdateTime},</if>
+            <if test="videoInfoPost.duration != null">duration = #{videoInfoPost.duration},</if>
+        </set>
+        WHERE video_id = #{videoId}
+    </update>
+
+    <!-- 删除视频发布信息 -->
+    <delete id="deleteByVideoId" parameterType="string">
+        DELETE FROM video_info_post WHERE video_id = #{videoId}
+    </delete>
+
+    <!-- 根据用户 ID 查询视频列表 -->
+    <select id="selectByUserId" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM video_info_post v
+        WHERE v.user_id = #{userId}
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 根据状态查询视频列表 -->
+    <select id="selectByStatus" parameterType="int" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM video_info_post v
+        WHERE v.status = #{status}
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 获取视频总数 -->
+    <select id="selectCount" resultType="int">
+        SELECT COUNT(*) FROM video_info_post
+    </select>
+
+    <!-- 根据条件获取视频总数 -->
+    <select id="selectCountByQuery" parameterType="com.bililive.pojo.VideoInfoPostQuery" resultType="int">
+        SELECT COUNT(*) 
+        from video_info_post v
+        <include refid="query_condition"/>
+    </select>
+
+    <!-- 获取视频列表 -->
+    <select id="selectList" parameterType="com.bililive.pojo.VideoInfoPostQuery" resultMap="BaseResultMap">
+        select 
+        <include refid="Base_Column_List"/>
+        <if test="query.queryCountInfo">
+            ,c.play_count,c.like_count,c.coin_count,c.collect_count,c.comment_count,c.danmu_count,c.recommend_type
+        </if>
+        <if test="query.queryUserInfo">
+            ,u.nick_name,u.avatar
+        </if>
+        from video_info_post v
+        <if test="query.queryCountInfo">
+            LEFT JOIN video_info c ON v.video_id = c.video_id
+        </if>
+        <if test="query.queryUserInfo">
+            LEFT JOIN user_info u ON v.user_id = u.user_id
+        </if>
+        <include refid="query_condition"/>
+        <if test="query.orderBy != null and query.orderBy != ''">
+            ORDER BY ${query.orderBy}
+        </if>
+        <if test="query.simplePage != null">
+            LIMIT #{query.simplePage.start}, #{query.simplePage.end}
+        </if>
+    </select>
+    <select id="selectListByVideoId" resultType="com.bililive.pojo.VideoInfoFile">
+        SELECT * FROM bililive.video_info_file WHERE video_id =#{videoId}
+    </select>
+
+    <!-- 根据查询条件更新视频信息 -->
+    <update id="updateByParam">
+        UPDATE video_info_post v
+        <set>
+            <if test="videoInfoPost.videoCover != null">video_cover = #{videoInfoPost.videoCover},</if>
+            <if test="videoInfoPost.videoName != null">video_name = #{videoInfoPost.videoName},</if>
+            <if test="videoInfoPost.pCategoryId != null">p_category_id = #{videoInfoPost.pCategoryId},</if>
+            <if test="videoInfoPost.categoryId != null">category_id = #{videoInfoPost.categoryId},</if>
+            <if test="videoInfoPost.postType != null">post_type = #{videoInfoPost.postType},</if>
+            <if test="videoInfoPost.tags != null">tags = #{videoInfoPost.tags},</if>
+            <if test="videoInfoPost.introduction != null">introduction = #{videoInfoPost.introduction},</if>
+            <if test="videoInfoPost.interaction != null">interaction = #{videoInfoPost.interaction},</if>
+            <if test="videoInfoPost.userId != null">user_id = #{videoInfoPost.userId},</if>
+            <if test="videoInfoPost.status != null">status = #{videoInfoPost.status},</if>
+            <if test="videoInfoPost.lastUpdateTime != null">last_update_time = #{videoInfoPost.lastUpdateTime},</if>
+            <if test="videoInfoPost.duration != null">duration = #{videoInfoPost.duration},</if>
+        </set>
+        <include refid="query_condition"/>
+    </update>
+
+</mapper>

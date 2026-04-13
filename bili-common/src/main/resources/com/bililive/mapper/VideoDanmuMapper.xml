@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bililive.mapper.VideoDanmuMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.bililive.pojo.VideoDanmu">
+        <result property="danmuId" column="danmu_id"/>
+        <result property="videoId" column="video_id"/>
+        <result property="fileId" column="file_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="text" column="text"/>
+        <result property="mode" column="mode"/>
+        <result property="color" column="color"/>
+        <result property="time" column="time"/>
+        <result property="postTime" column="post_time"/>
+    </resultMap>
+
+    <!-- 字段列表 -->
+    <sql id="Base_Column_List">
+        v.danmu_id, v.video_id, v.file_id, v.user_id, v.text, v.mode, v.color, v.time, v.post_time
+    </sql>
+
+    <!-- 插入弹幕 -->
+    <insert id="insert" parameterType="com.bililive.pojo.VideoDanmu">
+        INSERT INTO video_danmu (
+            danmu_id,
+            video_id,
+            file_id,
+            user_id,
+            text,
+            mode,
+            color,
+            time,
+            post_time
+        ) VALUES (
+            #{danmuId},
+            #{videoId},
+            #{fileId},
+            #{userId},
+            #{text},
+            #{mode},
+            #{color},
+            #{time},
+            #{postTime}
+        )
+    </insert>
+    <update id="updateCountInfo">
+        update video_info set  ${field} = ${field} + #{changeCount}
+        <if test="field=='play_count'">
+            ,last_play_time = now()
+        </if>
+        where video_id = #{videoId}
+    </update>
+
+    <!-- 查询弹幕列表 -->
+    <select id="selectList" parameterType="com.bililive.pojo.VideoDanmuQuery" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        <if test="query.queryVideoInfo">
+            ,vd.video_name,vd.video_cover,u.nick_name
+        </if>
+        FROM video_danmu v
+        <if test="query.queryVideoInfo">
+            INNER JOIN video_info vd ON v.video_id = vd.video_id
+            LEFT JOIN user_info u ON v.user_id = u.user_id
+        </if>
+        <include refid="query_condition"/>
+        <if test="query.orderBy != null and query.orderBy != ''">
+            ORDER BY ${query.orderBy}
+        </if>
+        <if test="query.simplePage!=null">
+            LIMIT #{query.simplePage.start}, #{query.simplePage.pageSize}
+        </if>
+    </select>
+
+    <!-- 根据查询条件统计弹幕总数 -->
+    <select id="selectCount" parameterType="com.bililive.pojo.VideoDanmuQuery" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM video_danmu v
+        <if test="query.queryVideoInfo">
+            INNER JOIN video_info vd ON v.video_id = vd.video_id
+        </if>
+        <include refid="query_condition"/>
+    </select>
+
+    <sql id="query_condition">
+        <where>
+            <if test="query.danmuId != null and query.danmuId != ''">
+                AND v.danmu_id = #{query.danmuId}
+            </if>
+            <if test="query.videoId != null and query.videoId != ''">
+                AND v.video_id = #{query.videoId}
+            </if>
+            <if test="query.fileId != null and query.fileId != ''">
+                AND v.file_id = #{query.fileId}
+            </if>
+            <if test="query.userId != null and query.userId != ''">
+                AND v.user_id = #{query.userId}
+            </if>
+            <if test="query.textFuzzy != null and query.textFuzzy != ''">
+                AND v.text LIKE CONCAT('%', #{query.textFuzzy}, '%')
+            </if>
+            <if test="query.mode != null">
+                AND v.mode = #{query.mode}
+            </if>
+            <if test="query.color != null and query.color != ''">
+                AND v.color = #{query.color}
+            </if>
+            <if test="query.time != null">
+                AND v.time = #{query.time}
+            </if>
+            <if test="query.minTime != null">
+                AND v.time &gt;= #{query.minTime}
+            </if>
+            <if test="query.maxTime != null">
+                AND v.time &lt;= #{query.maxTime}
+            </if>
+            <if test="query.postTime != null">
+                AND v.post_time = #{query.postTime}
+            </if>
+            <if test="query.postTimeStart != null">
+                AND v.post_time &gt;= #{query.postTimeStart}
+            </if>
+            <if test="query.postTimeEnd != null">
+                AND v.post_time &lt;= #{query.postTimeEnd}
+            </if>
+            <if test="query.videoUserId!= null and query.videoUserId !=''">
+                AND vd.user_id = #{query.videoUserId}
+            </if>
+            <if test="query.videoNameFuzzy != null and query.videoNameFuzzy != ''">
+                AND vd.video_name LIKE CONCAT('%', #{query.videoNameFuzzy}, '%')
+            </if>
+        </where>
+    </sql>
+
+    <!-- 根据弹幕 ID 查询弹幕 -->
+    <select id="selectByDanmuId" parameterType="int" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM video_danmu v
+        WHERE v.danmu_id = #{danmuId}
+    </select>
+
+    <!-- 根据弹幕 ID 删除弹幕 -->
+    <delete id="deleteByDanmuId" parameterType="int">
+        DELETE FROM video_danmu WHERE danmu_id = #{danmuId}
+    </delete>
+
+    <!-- 根据视频 ID 删除弹幕 -->
+    <delete id="deleteByVideoId" parameterType="string">
+        DELETE FROM video_danmu WHERE video_id = #{videoId}
+    </delete>
+
+</mapper>

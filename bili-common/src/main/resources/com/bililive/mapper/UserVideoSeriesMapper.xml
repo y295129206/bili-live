@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bililive.mapper.UserVideoSeriesMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.bililive.pojo.UserVideoSeries">
+        <id property="seriesId" column="series_id"/>
+        <result property="seriesName" column="series_name"/>
+        <result property="seriesDescription" column="series_description"/>
+        <result property="userId" column="user_id"/>
+        <result property="sort" column="sort"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <!-- 基础字段列表 -->
+    <sql id="Base_Column_List">
+        series_id, series_name, series_description, user_id, sort, update_time
+    </sql>
+
+    <!-- 插入视频合集 -->
+    <insert id="insert" parameterType="com.bililive.pojo.UserVideoSeries" useGeneratedKeys="true" keyProperty="seriesId">
+        INSERT INTO user_video_series (
+            series_name,
+            series_description,
+            user_id,
+            sort,
+            update_time
+        ) VALUES (
+            #{seriesName},
+            #{seriesDescription},
+            #{userId},
+            #{sort},
+            #{updateTime}
+        )
+    </insert>
+
+    <!-- 根据合集 ID 查询视频合集 -->
+    <select id="selectBySeriesId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_video_series
+        WHERE series_id = #{seriesId}
+    </select>
+
+    <!-- 根据用户 ID 查询视频合集列表 -->
+    <select id="selectListByUserId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_video_series
+        WHERE user_id = #{userId}
+        ORDER BY sort ASC, series_id DESC
+    </select>
+
+    <!-- 查询用户所有视频合集 -->
+    <select id="selectUserAllSeries" resultMap="BaseResultMap">
+        SELECT
+        t.*,v.video_cover cover FROM ( SELECT *,(SELECT video_id FROM user_video_series_video v WHERE v.series_id=s.series_id
+        ORDER BY sort asc LIMIT 1) video_id FROM user_video_series s WHERE s.user_id = #{userId}) t
+        LEFT JOIN video_info v ON t.video_id=v.video_id
+        ORDER BY t.sort asc;
+    </select>
+    <select id="selectMaxSort" resultType="java.lang.Integer">
+        SELECT IFNULL(max(sort),0) from user_video_series u where u.user_id=#{userId};
+    </select>
+
+    <!-- 更新视频合集 -->
+    <update id="updateBySeriesId" parameterType="com.bililive.pojo.UserVideoSeries">
+        UPDATE user_video_series
+        <set>
+            <if test="seriesName != null and seriesName != ''">
+                series_name = #{seriesName},
+            </if>
+            <if test="seriesDescription != null">
+                series_description = #{seriesDescription},
+            </if>
+            <if test="sort != null">
+                sort = #{sort},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        WHERE series_id = #{seriesId}
+    </update>
+    <update id="changeSort">
+        <foreach collection="userVideoSeriesList" separator=";" item="item">
+            UPDATE user_video_series
+            SET sort = #{item.sort}
+            WHERE series_id = #{item.seriesId} AND user_id = #{item.userId}
+        </foreach>
+    </update>
+
+    <!-- 删除视频合集 -->
+    <delete id="deleteBySeriesId" >
+        DELETE FROM user_video_series
+        WHERE series_id = #{seriesId}
+    </delete>
+    <delete id="deleteByParam">
+        DELETE FROM user_video_series
+        WHERE series_id = #{seriesId} AND user_id = #{userId}
+    </delete>
+
+    <resultMap id="base_result_map_video" type="com.bililive.pojo.UserVideoSeries" extends="BaseResultMap">
+        <collection property="videoInfoList" column="series_id" select="selectVideoList">
+        </collection>
+    </resultMap>
+    <select id="selectVideoList" resultType="com.bililive.pojo.VideoInfo">
+        select v.video_id,v.video_name,v.video_cover,v.play_count,v.create_time
+        from user_video_series_video sv inner join video_info v on sv.video_id = v.video_id
+        where sv.series_id = #{series_id} order by sv.sort asc limit 5;
+    </select>
+    <select id="selectListWithVideoList" resultMap="base_result_map_video">
+        select
+        <include refid="Base_Column_List"/>
+        from user_video_series u
+        <where>
+            <if test="query.seriesId != null">
+                and u.series_id = #{query.seriesId}
+            </if>
+            <if test="query.userId != null">
+                and u.user_id = #{query.userId}
+            </if>
+            <if test="query.orderBy != null">
+                ORDER BY ${query.orderBy}
+            </if>
+            <if test="query.simplePage != null">
+                LIMIT #{query.simplePage.start},#{query.simplePage.pageSize}
+            </if>
+        </where>
+    </select>
+
+</mapper>

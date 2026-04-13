@@ -1,0 +1,4 @@
+# 项目排除路径
+/bili-admin/target/
+/bili-common/target/
+/bili-web/target/

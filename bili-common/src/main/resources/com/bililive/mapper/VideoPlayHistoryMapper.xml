@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bililive.mapper.VideoPlayHistoryMapper">
+
+    <!-- 保存或更新播放历史 -->
+    <insert id="saveOrUpdate">
+        INSERT INTO video_play_history (user_id, video_id, file_index, last_update_time)
+        VALUES (#{userId}, #{videoId}, #{fileIndex}, #{lastUpdateTime})
+        ON DUPLICATE KEY UPDATE
+            file_index = #{fileIndex},
+            last_update_time = #{lastUpdateTime}
+    </insert>
+
+    <!-- 根据用户ID查询播放历史列表 -->
+    <select id="selectListByUserId" resultType="com.bililive.pojo.VideoPlayHistory">
+        SELECT * FROM video_play_history
+        WHERE user_id = #{userId}
+        ORDER BY last_update_time DESC
+    </select>
+
+    <!-- 根据用户ID和视频ID查询播放历史 -->
+    <select id="selectByUserIdAndVideoId" resultType="com.bililive.pojo.VideoPlayHistory">
+        SELECT * FROM video_play_history
+        WHERE user_id = #{userId} AND video_id = #{videoId}
+    </select>
+
+    <!-- 删除用户的播放历史 -->
+    <delete id="deleteByUserIdAndVideoId">
+        DELETE FROM video_play_history
+        WHERE user_id = #{userId} AND video_id = #{videoId}
+    </delete>
+
+    <!-- 根据查询条件分页查询播放历史列表 -->
+    <select id="selectList" resultType="com.bililive.pojo.VideoPlayHistory">
+        SELECT v.*
+        <if test="query.queryVideoDetail">
+            ,d.video_cover videoCover,d.video_name videoName
+        </if>
+        FROM video_play_history v
+        <if test="query.queryVideoDetail">
+            LEFT JOIN video_info d ON v.video_id = d.video_id
+        </if>
+        <where>
+            <if test="query.userId != null and query.userId != ''">
+                AND v.user_id = #{query.userId}
+            </if>
+            <if test="query.videoId != null and query.videoId != ''">
+                AND v.video_id = #{query.videoId}
+            </if>
+            <if test="query.fileIndex != null">
+                AND v.file_index = #{query.fileIndex}
+            </if>
+            <if test="query.lastUpdateTimeStart != null and query.lastUpdateTimeStart != ''">
+                AND v.last_update_time &gt;= #{query.lastUpdateTimeStart}
+            </if>
+            <if test="query.lastUpdateTimeEnd != null and query.lastUpdateTimeEnd != ''">
+                AND v.last_update_time &lt;= #{query.lastUpdateTimeEnd}
+            </if>
+        </where>
+        <if test="query.orderBy != null and query.orderBy != ''">
+            ORDER BY ${query.orderBy}
+        </if>
+        <if test="query.simplePage != null">
+            LIMIT #{query.simplePage.start}, #{query.simplePage.pageSize}
+        </if>
+    </select>
+
+    <!-- 根据查询条件统计总数 -->
+    <select id="selectCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM video_play_history
+        <where>
+            <if test="query.userId != null and query.userId != ''">
+                AND user_id = #{query.userId}
+            </if>
+            <if test="query.videoId != null and query.videoId != ''">
+                AND video_id = #{query.videoId}
+            </if>
+            <if test="query.fileIndex != null">
+                AND file_index = #{query.fileIndex}
+            </if>
+            <if test="query.lastUpdateTimeStart != null and query.lastUpdateTimeStart != ''">
+                AND last_update_time &gt;= #{query.lastUpdateTimeStart}
+            </if>
+            <if test="query.lastUpdateTimeEnd != null and query.lastUpdateTimeEnd != ''">
+                AND last_update_time &lt;= #{query.lastUpdateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据查询条件删除播放历史 -->
+    <delete id="deleteByParam">
+        DELETE FROM video_play_history
+        <where>
+            <if test="query.userId != null and query.userId != ''">
+                AND user_id = #{query.userId}
+            </if>
+            <if test="query.videoId != null and query.videoId != ''">
+                AND video_id = #{query.videoId}
+            </if>
+            <if test="query.fileIndex != null">
+                AND file_index = #{query.fileIndex}
+            </if>
+            <if test="query.lastUpdateTimeStart != null and query.lastUpdateTimeStart != ''">
+                AND last_update_time &gt;= #{query.lastUpdateTimeStart}
+            </if>
+            <if test="query.lastUpdateTimeEnd != null and query.lastUpdateTimeEnd != ''">
+                AND last_update_time &lt;= #{query.lastUpdateTimeEnd}
+            </if>
+        </where>
+    </delete>
+
+</mapper>

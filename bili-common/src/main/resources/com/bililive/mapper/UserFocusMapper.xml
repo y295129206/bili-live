@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bililive.mapper.UserFocusMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.bililive.pojo.UserFocus">
+        <id property="userId" column="user_id"/>
+        <id property="focusUserId" column="focus_user_id"/>
+        <result property="focusTime" column="focus_time"/>
+    </resultMap>
+
+    <!-- 基础字段列表 -->
+    <sql id="Base_Column_List">
+        user_id, focus_user_id, focus_time
+    </sql>
+
+    <!-- 插入关注记录 -->
+    <insert id="insert" parameterType="com.bililive.pojo.UserFocus">
+        INSERT INTO user_focus (
+            user_id,
+            focus_user_id,
+            focus_time
+        ) VALUES (
+            #{userId},
+            #{focusUserId},
+            #{focusTime}
+        )
+    </insert>
+
+    <!-- 根据用户 ID 和关注用户 ID 查询关注 -->
+    <select id="selectByUserIdAndFocusUserId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_focus
+        WHERE user_id = #{userId}
+        AND focus_user_id = #{focusUserId}
+    </select>
+
+    <!-- 根据查询条件统计关注总数 -->
+    <select id="selectFansCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM user_focus
+        where focus_user_id = #{userId}
+    </select>
+    <select id="selectFocusCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM user_focus
+        where user_id = #{userId}
+    </select>
+
+    <!-- 删除关注 -->
+    <delete id="deleteByUserIdAndFocusUserId">
+        DELETE FROM user_focus
+        WHERE user_id = #{userId}
+        AND focus_user_id = #{focusUserId}
+    </delete>
+    
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT
+            u.user_id, u.focus_user_id, u.focus_time
+            <if test="query.queryType!=null">
+                ,i.nick_name otherNickName,i.avatar otherAvatar,i.user_id otherUserId,i.person_introduce otherPersonIntroduction
+                ,(SELECT COUNT(1) FROM user_focus f WHERE u.user_id = f.focus_user_id AND u.focus_user_id = f.user_id) focusType
+            </if>
+            FROM user_focus u
+            <if test="query.queryType==0">
+                LEFT JOIN user_info i ON i.user_id = u.focus_user_id
+                WHERE u.user_id = #{query.userId}
+            </if>
+            <if test="query.queryType==1">
+                LEFT JOIN user_info i ON i.user_id = u.user_id
+                WHERE u.focus_user_id = #{query.userId}
+            </if>
+            <if test="query.orderBy!=null">
+                ORDER BY ${query.orderBy}
+            </if>
+            <if test="query.simplePage!=null">
+                LIMIT #{query.simplePage.start},#{query.simplePage.pageSize}
+            </if>
+    </select>
+
+    <!-- 根据查询条件统计总数 -->
+    <select id="selectCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM user_focus u
+        <if test="query.queryType==0">
+            LEFT JOIN user_info i ON i.user_id = u.focus_user_id
+            WHERE u.user_id = #{query.userId}
+        </if>
+        <if test="query.queryType==1">
+            LEFT JOIN user_info i ON i.user_id = u.user_id
+            WHERE u.focus_user_id = #{query.userId}
+        </if>
+    </select>
+
+</mapper>

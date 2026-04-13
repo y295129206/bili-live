@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bililive.mapper.VideoCommentMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.bililive.pojo.VideoComment">
+        <id property="commentId" column="comment_id"/>
+        <result property="videoId" column="video_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="content" column="content"/>
+        <result property="imgPath" column="img_path"/>
+        <result property="pCommentId" column="p_comment_id"/>
+        <result property="replyUserId" column="reply_user_id"/>
+        <result property="likeCount" column="like_count"/>
+        <result property="hateCount" column="hate_count"/>
+        <result property="postTime" column="post_time"/>
+        <result property="videoUserId" column="video_user_id"/>
+        <result property="topType" column="top_type"/>
+        <!-- 联表查询字段 -->
+        <result property="nickName" column="nickName"/>
+        <result property="avatar" column="avatar"/>
+        <result property="replyNickName" column="replyNickName"/>
+        <result property="replyAvatar" column="replyAvatar"/>
+        <result property="videoName" column="videoName"/>
+        <result property="videoCover" column="videoCover"/>
+    </resultMap>
+
+    <!-- 基础字段列表 -->
+    <sql id="Base_Column_List">
+        v.comment_id, v.video_id, v.user_id, v.content, v.img_path,
+        v.p_comment_id, v.reply_user_id, v.like_count,
+        v.hate_count, v.post_time, v.video_user_id, v.top_type
+    </sql>
+
+    <!-- 插入评论记录 -->
+    <insert id="insert" parameterType="com.bililive.pojo.VideoComment" useGeneratedKeys="true" keyProperty="commentId">
+        INSERT INTO video_comment (
+            video_id,
+            user_id,
+            content,
+            img_path,
+            p_comment_id,
+            reply_user_id,
+            like_count,
+            hate_count,
+            post_time,
+            video_user_id,
+            top_type
+        ) VALUES (
+            #{videoId},
+            #{userId},
+            #{content},
+            #{imgPath},
+            #{pCommentId},
+            #{replyUserId},
+            #{likeCount},
+            #{hateCount},
+            #{postTime},
+            #{videoUserId},
+            #{topType}
+        )
+    </insert>
+
+    <!-- 根据 ID 查询评论 -->
+    <select id="selectByCommentId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM video_comment v
+        WHERE comment_id = #{commentId}
+    </select>
+
+    <!-- 更新评论 -->
+    <update id="updateByCommentId" parameterType="com.bililive.pojo.VideoComment">
+        UPDATE video_comment
+        <set>
+            <if test="content != null">content = #{content},</if>
+            <if test="imgPath != null">img_path = #{imgPath},</if>
+            <if test="likeCount != null">like_count = #{likeCount},</if>
+            <if test="hateCount != null">hate_count = #{hateCount},</if>
+            <if test="topType != null">top_type = #{topType},</if>
+        </set>
+        WHERE comment_id = #{commentId}
+    </update>
+
+    <!-- 根据评论 ID 删除评论 -->
+    <delete id="deleteByCommentId" parameterType="int">
+        DELETE FROM video_comment WHERE comment_id = #{commentId}
+    </delete>
+
+    <!-- 批量删除评论 -->
+    <delete id="deleteBatch" parameterType="int">
+        DELETE FROM video_comment WHERE comment_id IN
+        <foreach item="commentId" collection="array" open="(" separator="," close=")">
+            #{commentId}
+        </foreach>
+    </delete>
+
+    <!-- 更新点赞数 -->
+    <update id="updateLikeCount">
+        UPDATE video_comment
+        SET like_count = like_count + #{changeCount}
+        WHERE comment_id = #{commentId}
+    </update>
+
+    <!-- 更新点踩数 -->
+    <update id="updateHateCount">
+        UPDATE video_comment
+        SET hate_count = hate_count + #{changeCount}
+        WHERE comment_id = #{commentId}
+    </update>
+
+    <!-- 查询条件 -->
+    <sql id="query_condition">
+        <where>
+            <if test="query.videoId != null and query.videoId != ''">
+                AND v.video_id = #{query.videoId}
+            </if>
+            <if test="query.userId != null and query.userId != ''">
+                AND v.user_id = #{query.userId}
+            </if>
+            <if test="query.videoUserId !=null and query.videoUserId !=''">
+                AND v.video_user_id = #{query.videoUserId}
+            </if>
+            <if test="query.commentId != null">
+                AND v.comment_id = #{query.commentId}
+            </if>
+            <if test="query.pCommentId != null">
+                AND v.p_comment_id = #{query.pCommentId}
+            </if>
+            <if test="query.topType !=null">
+                AND v.top_type = #{query.topType}
+            </if>
+            <if test="query.videoNameFuzzy !=null and query.videoNameFuzzy != ''">
+                and vd.video_name like concat('%',#{query.videoNameFuzzy},'%')
+            </if>
+        </where>
+    </sql>
+
+    <!-- 根据查询条件获取评论列表 -->
+    <select id="selectList" parameterType="com.bililive.pojo.VideoCommentQuery" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        <if test="query.queryVideoInfo">
+            ,vd.video_name as videoName,vd.video_cover as videoCover,u.nick_name as nickName,u.avatar ,u2.nick_name as replyNickName
+        </if>
+        FROM video_comment v
+        <if test="query.queryVideoInfo">
+            inner join video_info vd on vd.video_id = v.video_id
+            left join user_info u on u.user_id = v.user_id
+            left join user_info u2 on u2.user_id = v.reply_user_id
+        </if>
+        <include refid="query_condition"/>
+        <if test="query.orderBy != null and query.orderBy != ''">
+            ORDER BY ${query.orderBy}
+        </if>
+        <if test="query.simplePage!=null">
+            LIMIT #{query.simplePage.start}, #{query.simplePage.pageSize}
+        </if>
+    </select>
+
+    <!-- 根据查询条件统计评论总数 -->
+    <select id="selectCount" parameterType="com.bililive.pojo.VideoCommentQuery" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM video_comment v
+        <if test="query.queryVideoInfo">
+            inner join video_info vd on vd.video_id = v.video_id
+        </if>
+        <include refid="query_condition"/>
+
+    </select>
+    <resultMap id="base_result_map_children" type="com.bililive.pojo.VideoComment" extends="BaseResultMap">
+        <collection property="children" column="comment_id" select="com.bililive.mapper.VideoCommentMapper.selectChildComment"/>
+    </resultMap>
+    <select id="selectChildComment" resultMap="BaseResultMap">
+        select v.*,u.nick_name nickName,u.avatar avatar,u2.nick_name replyNickName, u2.avatar replyAvatar from video_comment  v
+        inner join user_info u on v.user_id = u.user_id
+        left join user_info u2 on u2.user_id = v.reply_user_id
+        where v.p_comment_id = #{commentId} order by v.comment_id asc
+    </select>
+    <!-- 获取评论列表 (包含子评论) -->
+    <select id="selectListWithChildren" parameterType="com.bililive.pojo.VideoCommentQuery" resultMap="base_result_map_children">
+        select <include refid="Base_Column_List"/>,u.nick_name nickName,u.avatar avatar
+        from video_comment v left join user_info u on v.user_id = u.user_id
+        <include refid="query_condition"/>
+        <if test="query.orderBy != null and query.orderBy != ''">
+            ORDER BY ${query.orderBy}
+        </if>
+        <if test="query.simplePage!=null">
+            limit #{query.simplePage.start}, #{query.simplePage.pageSize}
+        </if>
+    </select>
+
+    <update id="updateCountInfo">
+        update video_comment set ${field} = ${field} + #{changeCount}
+        <if test="opposeField != null">
+                ,${opposeField} = ${opposeField} + #{opposeChangeCount}
+        </if>
+        where comment_id = #{commentId}
+    </update>
+
+    <!-- 根据参数更新评论置顶状态 -->
+    <update id="updateByParam">
+        UPDATE video_comment
+        SET top_type = 0
+        WHERE video_id = #{query.videoId}
+        AND top_type = 1
+    </update>
+
+    <!-- 根据查询条件删除评论 -->
+    <delete id="deleteByParam" parameterType="com.bililive.pojo.VideoCommentQuery">
+        DELETE FROM video_comment v
+        <include refid="query_condition"></include>
+    </delete>
+
+    <!-- 根据视频 ID 删除评论 -->
+    <delete id="deleteByVideoId" parameterType="string">
+        DELETE FROM video_comment WHERE video_id = #{videoId}
+    </delete>
+
+</mapper>

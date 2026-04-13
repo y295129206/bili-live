@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bililive.mapper.UserInfoMapper">
+
+    <update id="updateByUserId">
+        update user_info
+        <set>
+            <if test="nickName != null and nickName != ''">nick_name =#{nickName},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="birthday != null and birthday != ''">birthday = #{birthday},</if>
+            <if test="school != null and school != ''">school = #{school},</if>
+            <if test="personIntroduce != null and personIntroduce != ''">person_introduce = #{personIntroduce},</if>
+            <if test="joinTime != null">join_time = #{joinTime},</if>
+            <if test="lastLoginTime != null">last_login_time = #{lastLoginTime},</if>
+            <if test="lastLoginIp != null and lastLoginIp != ''">last_login_ip = #{lastLoginIp},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="noticeInfo != null and noticeInfo != ''">notice_info = #{noticeInfo},</if>
+            <if test="totalCoinCount != null">total_coin_count = #{totalCoinCount},</if>
+            <if test="currentCoinCount != null">current_coin_count = #{currentCoinCount},</if>
+            <if test="theme != null">theme = #{theme},</if>
+            <if test="avatar != null and avatar != ''">avatar = #{avatar},</if>
+        </set>
+        where user_id =#{userId};
+    </update>
+    <update id="updateCoinCountByUserId">
+        update user_info
+        <set>
+            current_coin_count = current_coin_count+#{changeCount}
+            <if test="changeCount>0">
+                ,total_coin_count = total_coin_count+#{changeCount}
+            </if>
+        </set>
+        where user_id = #{userId} and current_coin_count+#{changeCount}>=0
+    </update>
+
+    <!-- 根据用户ID列表批量查询用户信息 -->
+    <select id="selectListByUserIdList" resultType="com.bililive.pojo.UserInfo">
+        SELECT * FROM user_info
+        WHERE user_id IN
+        <foreach collection="userIdList" item="userId" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </select>
+
+    <!-- 根据查询条件查询用户列表 -->
+    <select id="selectList" parameterType="com.bililive.pojo.UserInfoQuery" resultType="com.bililive.pojo.UserInfo">
+        SELECT * FROM user_info
+        <where>
+            <if test="query.userId != null and query.userId != ''">
+                AND user_id = #{query.userId}
+            </if>
+            <if test="query.nickName != null and query.nickName != ''">
+                AND nick_name LIKE CONCAT('%', #{query.nickName}, '%')
+            </if>
+            <if test="query.email != null and query.email != ''">
+                AND email LIKE CONCAT('%', #{query.email}, '%')
+            </if>
+            <if test="query.sex != null">
+                AND sex = #{query.sex}
+            </if>
+            <if test="query.school != null and query.school != ''">
+                AND school LIKE CONCAT('%', #{query.school}, '%')
+            </if>
+            <if test="query.status != null">
+                AND status = #{query.status}
+            </if>
+            <if test="query.userIdList != null and query.userIdList.size() > 0">
+                AND user_id IN
+                <foreach collection="query.userIdList" item="userId" open="(" separator="," close=")">
+                    #{userId}
+                </foreach>
+            </if>
+        </where>
+        <if test="query.orderBy != null and query.orderBy != ''">
+            ORDER BY ${query.orderBy}
+        </if>
+        <if test="query.simplePage != null">
+            LIMIT #{query.simplePage.start}, #{query.simplePage.pageSize}
+        </if>
+    </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM user_info
+        <if test="query.joinTime != null">
+            WHERE <![CDATA[ join_time >= #{query.joinTime} ]]>
+        </if>
+    </select>
+</mapper>
