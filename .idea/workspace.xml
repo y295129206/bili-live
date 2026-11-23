@@ -4,7 +4,41 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="10ac9ffa-541e-4ff5-8910-9c7a10ce9e03" name="更改" comment="new" />
+    <list default="true" id="10ac9ffa-541e-4ff5-8910-9c7a10ce9e03" name="更改" comment="new">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/404-eHhn55hh.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/Account-RHbNslOV.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/CategoryVideo-CHydwbkF.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/Collection-Dn4lDIwB.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/CommentList-BkJiNmIj.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/DanmuList-BTacmOMi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/FansList-EgaRJqT-.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/FocusFansList-CFDKgrVX.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/History-DlfL98iz.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/Home-B6YSOhbV.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/Home-sOlRDDTI.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/Hot-DOXh4QGt.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/Index-4pfNI3C8.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/Layout-CsBWgmy1.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/LayoutHeader-BLL3tZ_l.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/Post-B96rcV26.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/Search-DD4Do0oV.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/Search-QJ0Y0Jra.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/Table-BspakFlr.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/UcLayout-BaESbb3Z.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/UserHomeLayout-6ZWzFdEq.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/UserMessage-D1-dFK7Q.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/VideoDetail-BbQIH5xH.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/VideoItem-DUXe6zk2.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/VideoList-BidqFro8.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/VideoList-BvTVZeUm.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/VideoList-fzEjYNPh.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/VideoSeries-CtS-arpL.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/VideoSeriesDetail-BQVCUWu0.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/VideoSeriesEdit-CU9tg2hJ.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/assets/index-D0O6cy_G.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/dist/index.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -265,7 +299,7 @@
       <workItem from="1778294862391" duration="3000" />
       <workItem from="1778303158396" duration="375000" />
       <workItem from="1795412477073" duration="1103000" />
-      <workItem from="1795417392626" duration="455000" />
+      <workItem from="1795417392626" duration="1455000" />
     </task>
     <task id="LOCAL-00001" summary="new">
       <option name="closed" value="true" />
@@ -275,7 +309,23 @@
       <option name="project" value="LOCAL" />
       <updated>1795417840554</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="new">
+      <option name="closed" value="true" />
+      <created>1795417914576</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1795417914576</updated>
+    </task>
+    <task id="LOCAL-00003" summary="new">
+      <option name="closed" value="true" />
+      <created>1795417946926</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1795417946926</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
