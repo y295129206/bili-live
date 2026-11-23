@@ -4,125 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="10ac9ffa-541e-4ff5-8910-9c7a10ce9e03" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-admin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/bili-admin/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-admin/src/main/java/com/bililive/admin/controller/FileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/bili-admin/src/main/java/com/bililive/admin/controller/FileController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-admin/src/main/java/com/bililive/admin/controller/VideoInfoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/bili-admin/src/main/java/com/bililive/admin/controller/VideoInfoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-admin/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/bili-admin/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-common/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/bili-common/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-common/src/main/java/com/bililive/component/RedisComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/bili-common/src/main/java/com/bililive/component/RedisComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-common/src/main/java/com/bililive/entity/config/AppConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/bili-common/src/main/java/com/bililive/entity/config/AppConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-common/src/main/java/com/bililive/entity/constants/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/bili-common/src/main/java/com/bililive/entity/constants/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-common/src/main/java/com/bililive/mapper/UserActionMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/bili-common/src/main/java/com/bililive/mapper/UserActionMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-common/src/main/java/com/bililive/pojo/UserAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/bili-common/src/main/java/com/bililive/pojo/UserAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-common/src/main/java/com/bililive/service/impl/UserActionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/bili-common/src/main/java/com/bililive/service/impl/UserActionServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-common/src/main/java/com/bililive/service/impl/VideoCommentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/bili-common/src/main/java/com/bililive/service/impl/VideoCommentServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-common/src/main/java/com/bililive/service/impl/VideoDanmuServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/bili-common/src/main/java/com/bililive/service/impl/VideoDanmuServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-common/src/main/java/com/bililive/utils/ProcessUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/bili-common/src/main/java/com/bililive/utils/ProcessUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-common/src/main/resources/com/bililive/mapper/UserActionMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/bili-common/src/main/resources/com/bililive/mapper/UserActionMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/@vueuse_core.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/@vueuse_core.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/artplayer-plugin-danmuku.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/artplayer-plugin-danmuku.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/artplayer.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/artplayer.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/axios.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/axios.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/chunk-KE5LXLFG.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/chunk-KE5LXLFG.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/chunk-PR4QN5HX.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/chunk-PR4QN5HX.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/chunk-REBK7YBW.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/chunk-REBK7YBW.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/chunk-RQWDQMSX.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/chunk-RQWDQMSX.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/chunk-YFT6OQ5R.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/chunk-YFT6OQ5R.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/echarts.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/echarts.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/element-plus.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/element-plus.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/element-plus_es_locale_lang_zh-cn.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/element-plus_es_locale_lang_zh-cn.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/hls__js.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/hls__js.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/js-md5.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/js-md5.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/mitt.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/mitt.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/moment.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/moment.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/pinia.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/pinia.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/vue-cookies.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/vue-cookies.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/vue-cropper.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/vue-cropper.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/vue-router.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/vue-router.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/vue.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/node_modules/.vite/deps_temp_cf493c94/vue.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/src/views/home/Home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-admin/src/views/home/Home.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/@fingerprintjs_fingerprintjs.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/@fingerprintjs_fingerprintjs.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/@vueuse_core.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/@vueuse_core.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/artplayer-plugin-danmuku.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/artplayer-plugin-danmuku.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/artplayer.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/artplayer.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/axios.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/axios.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/chunk-KE5LXLFG.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/chunk-KE5LXLFG.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/chunk-PR4QN5HX.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/chunk-PR4QN5HX.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/chunk-REBK7YBW.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/chunk-REBK7YBW.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/chunk-RQWDQMSX.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/chunk-RQWDQMSX.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/chunk-YFT6OQ5R.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/chunk-YFT6OQ5R.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/echarts.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/echarts.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/element-plus.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/element-plus.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/element-plus_es_locale_lang_zh-cn.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/element-plus_es_locale_lang_zh-cn.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/hls__js.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/hls__js.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/js-md5.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/js-md5.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/mitt.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/mitt.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/moment.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/moment.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/pinia.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/pinia.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/vue-cookies.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/vue-cookies.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/vue-cropper.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/vue-cropper.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/vue-draggable-plus.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/vue-draggable-plus.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/vue-router.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/vue-router.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/vue.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/node_modules/.vite/deps_temp_ee4319be/vue.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/src/assets/login_bg.png" beforeDir="false" afterPath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/src/assets/login_bg.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/src/utils/Api.js" beforeDir="false" afterPath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/src/utils/Api.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/src/views/account/Account.vue" beforeDir="false" afterPath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/src/views/account/Account.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/src/views/layout/LayoutHeader.vue" beforeDir="false" afterPath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/src/views/layout/LayoutHeader.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/src/views/ucenter/Home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/src/views/ucenter/Home.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/src/views/videoList/VideoList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/bili-live/bili-live-front/bili-live-front-web/src/views/videoList/VideoList.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-web/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/bili-web/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-web/src/main/java/com/bililive/web/controller/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/bili-web/src/main/java/com/bililive/web/controller/AccountController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bili-web/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/bili-web/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-    </list>
+    <list default="true" id="10ac9ffa-541e-4ff5-8910-9c7a10ce9e03" name="更改" comment="new" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -383,7 +265,17 @@
       <workItem from="1778294862391" duration="3000" />
       <workItem from="1778303158396" duration="375000" />
       <workItem from="1795412477073" duration="1103000" />
+      <workItem from="1795417392626" duration="455000" />
     </task>
+    <task id="LOCAL-00001" summary="new">
+      <option name="closed" value="true" />
+      <created>1795417840554</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1795417840554</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -399,6 +291,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="new" />
+    <option name="LAST_COMMIT_MESSAGE" value="new" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
