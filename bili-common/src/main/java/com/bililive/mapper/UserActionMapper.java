@@ -71,4 +71,11 @@ public interface UserActionMapper {
      * @return 总数
      */
     Integer selectCount(@Param("query") UserActionQuery query);
+
+    /**
+     * 查询所有用户的视频行为（用于构建用户-视频评分矩阵）
+     * @param limit 限制数量
+     * @return 用户行为列表
+     */
+    List<UserAction> selectAllUserVideoActions(@Param("limit") Integer limit);
 }

@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="data-list">
-      <DataGridList :gridCount="6" :dataSource="dataSource">
+      <DataGridList :gridCount="6" :dataSource="dataSource" @loadData="loadDataList">
         <template #default="{ data }">
           <VideoItem :data="data"> </VideoItem>
         </template>
@@ -88,21 +88,41 @@ const search = () => {
 }
 const order = ref(route.query.order)
 const changeOrder = (item) => {
+  // 只有点在了不同的排序上才重新加载，避免无意义的重复请求
+  // 用 == 是为了让 undefined 与 null（综合排序）视为同一状态
+  if (order.value == item.order) {
+    return
+  }
   order.value = item.order
-  search()
+  // 切换排序时重置到第一页，否则沿用旧页码可能查不到数据
+  dataSource.value.pageNo = 1
+  // 关键修复：直接重新加载数据，不能只靠路由跳转后的 watch
+  loadDataList()
+  // 同步地址栏（供刷新/分享保留当前排序）
+  router.push({
+    path: '/search',
+    query: {
+      keyword: keyword.value,
+      order: order.value,
+    },
+  })
 }
 
 const loadingData = ref(false)
 const dataSource = ref({})
 const loadDataList = async () => {
+  // 用组件内的 order（已由 changeOrder 同步更新），不要用 route.query.order，
+  // 因为 router.push 是异步的，此处读取时 URL 可能还是旧值，导致加载到旧排序的数据。
   const orderTypeBtn = orderBtns.value.find((item) => {
-    return route.query.order == item.order
+    return order.value == item.order
   })
+  // 兜底：找不到对应排序时按综合排序处理，避免 orderTypeBtn.orderType 抛错导致整页空白
+  const orderType = orderTypeBtn ? orderTypeBtn.orderType : null
 
   let params = {
-    pageNo: dataSource.value.pageNo,
-    keyword: route.query.keyword,
-    orderType: orderTypeBtn.orderType,
+    pageNo: dataSource.value.pageNo || 1,
+    keyword: keyword.value || route.query.keyword,
+    orderType,
   }
   loadingData.value = true
   let result = await proxy.Request({

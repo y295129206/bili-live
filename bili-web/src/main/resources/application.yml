@@ -32,6 +32,24 @@ spring:
         max-idle: 10
         min-idle: 0
     timeout: 2000
+  # 邮件发送（邮箱验证码注册功能）
+  # 注意：password 必须是 QQ 邮箱「授权码」而非登录密码，忘记登录密码不影响发信；
+  # 已填入授权码，仍可用环境变量 MAIL_PASSWORD 覆盖（换码无需改代码）。
+  mail:
+    host: smtp.qq.com
+    port: 465
+    protocol: smtps
+    username: 2918971631@qq.com
+    password: ${MAIL_PASSWORD:bammsncibcyzdfej}
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+          auth: true
+          starttls:
+            enable: false
 #mybatis 大小写转驼峰
 mybatis:
   configuration:

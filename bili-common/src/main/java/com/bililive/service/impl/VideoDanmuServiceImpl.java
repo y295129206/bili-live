@@ -3,6 +3,7 @@ package com.bililive.service.impl;
 import com.bililive.Enum.SearchOrderTypeEnum;
 import com.bililive.Enum.UserActionTypeEnum;
 import com.bililive.component.EsSearchComponent;
+import com.bililive.mapper.UserActionMapper;
 import com.bililive.mapper.VideoDanmuMapper;
 import com.bililive.mapper.VideoInfoMapper;
 import com.bililive.pojo.*;
@@ -23,11 +24,13 @@ public class VideoDanmuServiceImpl implements VideoDanmuService {
 
     @Autowired
     private VideoDanmuMapper videoDanmuMapper;
-
     @Autowired
     private VideoInfoMapper videoInfoMapper;
     @Autowired
     private EsSearchComponent esSearchComponent;
+    @Autowired
+    private UserActionMapper userActionMapper;
+
     @Override
     public void saveVideoDanmu(VideoDanmu danmu) {
         VideoInfo videoInfo = videoInfoMapper.selectByVideoId(danmu.getVideoId());
@@ -38,6 +41,15 @@ public class VideoDanmuServiceImpl implements VideoDanmuService {
             throw new BaseException("视频已禁止弹幕");
         }
         videoDanmuMapper.insert(danmu);
+        UserAction userAction = new UserAction();
+        userAction.setUserId(danmu.getUserId());
+        userAction.setVideoId(danmu.getVideoId());
+        userAction.setActionTime(danmu.getPostTime());
+        userAction.setActionType(UserActionTypeEnum.VIDEO_DANMU.getType());
+        userAction.setActionCount(1);
+        userAction.setCommentId(0);
+        userAction.setVideoUserId(videoInfo.getUserId());
+        userActionMapper.insert(userAction);
         videoDanmuMapper.updateCountInfo(danmu.getVideoId(), UserActionTypeEnum.VIDEO_DANMU.getField(),1);
         esSearchComponent.updateDocCount(danmu.getVideoId(), SearchOrderTypeEnum.DANMU_COUNT.getField(),1);
     }

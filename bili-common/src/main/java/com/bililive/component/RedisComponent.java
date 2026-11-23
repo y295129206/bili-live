@@ -38,6 +38,54 @@ public class RedisComponent {
         redisUtils.delete(Constants.REDIS_KEY_CHECK_CODE+code);
     }
 
+    // ==================== 邮箱验证码（注册功能）====================
+
+    /**
+     * 保存邮箱验证码（覆盖旧值，失败次数归零）
+     * @param email 注册邮箱
+     * @param code  6 位数字验证码
+     */
+    public void saveEmailCode(String email, String code) {
+        redisUtils.setex(Constants.REDIS_KEY_EMAIL_CODE + email,
+                new EmailCodeDto(code), Constants.EMAIL_CODE_EXPIRE);
+    }
+
+    /**
+     * 读取邮箱验证码对象（含验证码与失败次数）
+     */
+    public EmailCodeDto getEmailCode(String email) {
+        return (EmailCodeDto) redisUtils.get(Constants.REDIS_KEY_EMAIL_CODE + email);
+    }
+
+    /**
+     * 更新验证码对象（主要用于累加失败次数），保留剩余有效期不重置
+     * 注意：setex 会刷新 TTL，这里沿用同样的过期时间，语义上等同"从最后一次尝试再续 5 分钟"，
+     * 若需严格不续期，可改用只 set value 的方式。
+     */
+    public void updateEmailCode(String email, EmailCodeDto dto) {
+        redisUtils.setex(Constants.REDIS_KEY_EMAIL_CODE + email, dto, Constants.EMAIL_CODE_EXPIRE);
+    }
+
+    /**
+     * 删除邮箱验证码（校验通过或失败次数超限时调用，保证一次性）
+     */
+    public void cleanEmailCode(String email) {
+        redisUtils.delete(Constants.REDIS_KEY_EMAIL_CODE + email);
+    }
+
+    /**
+     * 记录发送时间戳并设置 60 秒限流窗口
+     * @return true-设置成功；false-已有窗口（发送过于频繁）
+     */
+    public boolean setEmailCodeSendLimit(String email) {
+        String key = Constants.REDIS_KEY_EMAIL_CODE_LIMIT + email;
+        if (redisUtils.keyExists(key)) {
+            return false;
+        }
+        redisUtils.setex(key, System.currentTimeMillis(), Constants.EMAIL_CODE_SEND_INTERVAL);
+        return true;
+    }
+
     public void saveToken(TokenUserInfoDto tokenUserInfoDto){
         String token = UUID.randomUUID().toString();
         tokenUserInfoDto.setExpireAt(System.currentTimeMillis()+Constants.REDIS_KEY_EXPIRES_ONE_DAY*7);
@@ -183,5 +231,9 @@ public class RedisComponent {
 
     public void saveSettingDto(SysSettingDto sysSettingDto) {
         redisUtils.set(Constants.REDIS_KEY_SYS_SETTING,sysSettingDto);
+    }
+
+    public RedisUtils getRedisUtils() {
+        return redisUtils;
     }
 }

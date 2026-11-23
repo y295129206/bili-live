@@ -76,6 +76,10 @@ public class UserActionServiceImpl implements UserActionService {
                 if(dbUserAction != null){
                     throw new BaseException(600,"不能重复投币");
                 }
+                // 确保 actionCount 有默认值
+                if(userAction.getActionCount() == null || userAction.getActionCount() <= 0) {
+                    userAction.setActionCount(1);
+                }
                 Integer changeCount2 = userInfoMapper.updateCoinCountByUserId(userAction.getUserId(),-userAction.getActionCount());
                 if(changeCount2 == 0){
                     throw new BaseException(600,"用户余额不足");

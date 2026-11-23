@@ -176,8 +176,9 @@ const loadWeekData = async () => {
     yAxis: [
       {
         type: "value",
+        minInterval: 1,
         axisLabel: {
-          formatter: "{value} °C",
+          formatter: "{value} ",
         },
       },
     ],

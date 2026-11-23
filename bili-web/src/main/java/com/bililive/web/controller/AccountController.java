@@ -6,6 +6,7 @@ import com.bililive.pojo.Result;
 import com.bililive.pojo.TokenUserInfoDto;
 import com.bililive.pojo.UserCountInfoDto;
 import com.bililive.redis.RedisUtils;
+import com.bililive.service.EmailService;
 import com.bililive.service.UserInfoService;
 import com.wf.captcha.ArithmeticCaptcha;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,18 @@ public class AccountController {
     private RedisComponent redisComponent;
     @Autowired
     private RedisUtils redisUtils;
+    @Autowired
+    private EmailService emailService;
+
+    /**
+     * 发送邮箱验证码（注册功能）
+     * 校验邮箱格式/是否已注册/60秒限流后，通过 QQ SMTP 发送 6 位验证码。
+     */
+    @RequestMapping("/sendEmailCode")
+    public Result sendEmailCode(@NotEmpty @Email @Size(max = 150) String email) {
+        emailService.sendEmailCode(email);
+        return Result.success();
+    }
 
     @RequestMapping("/checkCode")
     public Result<Map<String,String>> checkCode(){
@@ -59,12 +72,18 @@ public class AccountController {
                                     @NotEmpty @Size(max=20) String nickName,
                                     @NotEmpty @Pattern(regexp = Constants.REGEX_PASSWORD) String registerPassword,
                                     @NotEmpty String checkCodeKey,
-                                    @NotEmpty String checkCode){
-        String myCheckCode = null;
+                                    @NotEmpty String checkCode,
+                                    @NotEmpty String emailCode){
+        // 规范化邮箱：与发码/验码时保持一致的 key
+        email = email.trim().toLowerCase();
         try {
+            // 1. 校验算术验证码（原有逻辑）
             if(!checkCode.equalsIgnoreCase(redisComponent.getCheckCode(checkCodeKey))){
                 throw new BaseException("验证码出错");
             }
+            // 2. 校验邮箱验证码（新增：通过即删 / 失败5次作废）
+            emailService.verifyEmailCode(email, emailCode);
+            // 3. 执行注册
             Boolean result = userInfoService.register(email,nickName,registerPassword);
             return Result.success(result);
         } finally {

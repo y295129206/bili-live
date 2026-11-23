@@ -1,16 +1,24 @@
 package com.bililive.admin.controller;
 
+import com.bililive.component.RedisComponent;
 import com.bililive.entity.config.AppConfig;
-import com.bililive.pojo.BaseException;
-import com.bililive.pojo.Result;
+import com.bililive.entity.constants.Constants;
+import com.bililive.mapper.VideoInfoFileMapper;
+import com.bililive.pojo.*;
+import com.bililive.service.VideoInfoFileService;
+import com.bililive.service.VideoInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotEmpty;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +37,10 @@ public class FileController {
 
     @Autowired
     private AppConfig appConfig;
+    @Autowired
+    private VideoInfoFileMapper videoInfoFileMapper;
+    @Autowired
+    private RedisComponent redisComponent;
 
     /**
      * 上传图片
@@ -364,5 +376,69 @@ public class FileController {
         String name = imagePath.substring(0, lastDot);
         String ext = imagePath.substring(lastDot);
         return name + "_thumb" + ext;
+    }
+    @RequestMapping("/videoResource/{fileId}/**")
+    public void videoResource(HttpServletResponse response, @PathVariable @NotEmpty String fileId, HttpServletRequest request){
+        VideoInfoFile videoInfoFile = videoInfoFileMapper.getVideoInfoFileByFileId(fileId);
+        if (videoInfoFile == null) {
+            log.warn("视频文件不存在：{}", fileId);
+            throw new BaseException("视频文件不存在");
+        }
+
+        String filePath = videoInfoFile.getFilePath();
+        boolean index = readFile(response, filePath, fileId, request);
+    }
+    /**
+     * 读取并输出文件内容
+     */
+    private boolean readFile(HttpServletResponse response, String filePath, String fileId, HttpServletRequest request) {
+        // 获取请求路径中的文件名部分（如 /0000.ts）
+        String requestUri = request.getRequestURI();
+        String contextPath = request.getContextPath();
+        String basePath = contextPath + "/file/videoResource/" + fileId;
+        String fileName = requestUri.substring(basePath.length());
+        Boolean index = false;
+        // 如果没有指定文件名，默认返回 index.m3u8
+        if (fileName == null || fileName.isEmpty() || "/".equals(fileName)) {
+            fileName = "/" + Constants.M3U8_NAME;
+            index = true;
+        }
+
+        log.info("视频资源：{}, 文件名：{}", filePath, fileName);
+
+        // 拼接完整路径：项目根目录 + 文件目录 + 视频目录 + 文件路径 + 文件名
+        String fullPath = appConfig.getProjectFolder() + Constants.FILE_FOLDER + filePath + fileName;
+
+        File file = new File(fullPath);
+        if (!file.exists()) {
+            log.warn("文件不存在：{}", fullPath);
+            throw new BaseException("文件不存在");
+        }
+
+        try {
+            // 设置响应类型
+            String contentType = Files.probeContentType(Paths.get(fullPath));
+            if (contentType != null) {
+                response.setContentType(contentType);
+            } else {
+                response.setContentType("application/octet-stream");
+            }
+
+            // 设置缓存控制（对于 HLS 流媒体，禁用缓存）
+            response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+            response.setHeader("Pragma", "no-cache");
+            response.setHeader("Expires", "0");
+
+            // 输出文件流
+            Files.copy(Paths.get(fullPath), response.getOutputStream());
+            response.getOutputStream().flush();
+
+            log.info("文件读取成功：{}", fullPath);
+
+        } catch (IOException e) {
+            log.error("读取文件失败：{}", fullPath, e);
+            throw new BaseException("读取文件失败：" + e.getMessage());
+        }
+        return index;
     }
 }

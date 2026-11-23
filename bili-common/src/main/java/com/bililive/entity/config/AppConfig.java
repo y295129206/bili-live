@@ -19,4 +19,11 @@ public class AppConfig {
     private String esHostPort;
     @Value("${es.index.video.name:bililive_video}")
     private String esIndexVideoName;
+
+    /**
+     * 邮件发送人邮箱（邮箱验证码注册功能）
+     * 值与 spring.mail.username 保持一致，用于 JavaMailSender 的 MimeMessage.setFrom
+     */
+    @Value("${spring.mail.username:}")
+    private String mailFrom;
 }

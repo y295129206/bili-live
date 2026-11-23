@@ -97,6 +97,29 @@
                 </template>
               </el-input>
             </el-form-item>
+            <!-- 邮箱验证码（新增：注册时必填） -->
+            <el-form-item prop="emailCode">
+              <div class="email-code-panel">
+                <el-input
+                  size="large"
+                  placeholder="请输入邮箱验证码"
+                  v-model="formData.emailCode"
+                  maxlength="6"
+                >
+                  <template #prefix>
+                    <span class="iconfont icon-checkcode"></span>
+                  </template>
+                </el-input>
+                <el-button
+                  size="large"
+                  class="email-code-btn"
+                  :disabled="emailCodeBtnDisabled"
+                  @click="sendEmailCode"
+                >
+                  {{ emailCodeBtnText }}
+                </el-button>
+              </div>
+            </el-form-item>
           </div>
           <el-form-item prop="checkCode">
             <div class="check-code-panel">
@@ -203,11 +226,66 @@ const rules = {
     },
   ],
   checkCode: [{ required: true, message: "请输入图片验证码" }],
+  emailCode: [{ required: true, message: "请输入邮箱验证码" }],
+};
+
+// ============ 邮箱验证码（注册功能）============
+const emailCodeBtnDisabled = ref(false);
+const emailCodeBtnText = ref("获取验证码");
+let emailCodeTimer = null;
+
+// 本地 QQ 邮箱格式校验：QQ 邮箱为纯数字@qq.com
+const isQQEmail = (email) => {
+  return /^[1-9]\d{4,10}@qq\.com$/i.test(email || "");
+};
+
+// 点击「获取验证码」
+const sendEmailCode = async () => {
+  const email = (formData.value.email || "").trim();
+  if (!email) {
+    proxy.Message.warning("请先输入邮箱");
+    return;
+  }
+  if (!isQQEmail(email)) {
+    proxy.Message.warning("目前只支持QQ邮箱注册");
+    return;
+  }
+  let result = await proxy.Request({
+    url: proxy.Api.sendEmailCode,
+    params: { email: email },
+  });
+  if (!result) {
+    return;
+  }
+  proxy.Message.success("验证码已发送，请查收邮件");
+
+  // 启动 60 秒倒计时，防止重复点击
+  emailCodeBtnDisabled.value = true;
+  let seconds = 60;
+  emailCodeBtnText.value = seconds + "s后重发";
+  emailCodeTimer = setInterval(() => {
+    seconds--;
+    if (seconds <= 0) {
+      clearInterval(emailCodeTimer);
+      emailCodeTimer = null;
+      emailCodeBtnDisabled.value = false;
+      emailCodeBtnText.value = "获取验证码";
+    } else {
+      emailCodeBtnText.value = seconds + "s后重发";
+    }
+  }, 1000);
 };
 
 //重置表单
 const resetForm = () => {
   changeCheckCode();
+  // 重置邮箱验证码按钮状态并清理倒计时
+  if (emailCodeTimer) {
+    clearInterval(emailCodeTimer);
+    emailCodeTimer = null;
+  }
+  emailCodeBtnDisabled.value = false;
+  emailCodeBtnText.value = "获取验证码";
   nextTick(() => {
     formDataRef.value.resetFields();
     formData.value = {};
@@ -316,6 +394,16 @@ onMounted(() => {
   .check-code {
     margin-left: 5px;
     cursor: pointer;
+  }
+}
+
+.email-code-panel {
+  display: flex;
+  width: 100%;
+  .email-code-btn {
+    margin-left: 5px;
+    width: 120px;
+    flex-shrink: 0;
   }
 }
 </style>

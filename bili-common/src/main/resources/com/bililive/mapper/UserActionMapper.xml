@@ -144,4 +144,16 @@
         <include refid="query_condition"></include>
     </select>
 
+    <!-- 查询所有用户的视频行为（用于构建用户-视频评分矩阵） -->
+    <select id="selectAllUserVideoActions" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_action
+        WHERE action_type IN (2, 3, 4, 5, 6, 7)
+        ORDER BY action_time DESC
+        <if test="limit != null">
+            LIMIT #{limit}
+        </if>
+    </select>
+
 </mapper>

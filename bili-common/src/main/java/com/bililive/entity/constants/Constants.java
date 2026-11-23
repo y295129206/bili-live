@@ -4,6 +4,12 @@ public class Constants {
     //正则表达式。限制密码
     public static final String REGEX_PASSWORD = "^(?=.*\\d)(?=.*[a-zA-Z])[\\da-zA-Z~!@#$%^&*_]{8,18}$";
 
+    /**
+     * QQ 邮箱正则：仅接受数字@qq.com（注册邮箱验证码功能要求只支持 QQ 邮箱）
+     * 使用 ^...$ 严格匹配整个字符串，避免 xxx@qq.com.evil.com 这类绕过
+     */
+    public static final String REGEX_QQ_EMAIL = "^[1-9]\\d{4,10}@qq\\.com$";
+
     public static final Integer ONE=1;
 
     public static final Integer ZERO=0;
@@ -16,11 +22,26 @@ public class Constants {
 
     public static final Integer REDIS_KEY_EXPIRES_ONE_DAY = REDIS_KEY_EXPIRES_ONE_MIN*24*60;
 
+    /** 邮箱验证码有效期：5 分钟（毫秒） */
+    public static final Integer EMAIL_CODE_EXPIRE = REDIS_KEY_EXPIRES_ONE_MIN * 5;
+
+    /** 邮箱验证码发送间隔：60 秒（毫秒），用于限流 */
+    public static final Integer EMAIL_CODE_SEND_INTERVAL = REDIS_KEY_EXPIRES_ONE_MIN;
+
+    /** 邮箱验证码连续输错的最大次数，达到后验证码作废 */
+    public static final Integer EMAIL_CODE_MAX_FAIL_COUNT = 5;
+
     public static final Integer UPDATE_NICK_NAME_COIN = 5;
 
     public static final String REDIS_KEY_PREFIX= "bililive:";
 
     public static String REDIS_KEY_CHECK_CODE = REDIS_KEY_PREFIX+"checkCode:";
+
+    /** 邮箱验证码：值为 EmailCodeDto（验证码 + 失败次数），TTL 5 分钟 */
+    public static String REDIS_KEY_EMAIL_CODE = REDIS_KEY_PREFIX+"emailCode:";
+
+    /** 邮箱验证码发送限流：value 为发送时间戳，TTL 60 秒 */
+    public static String REDIS_KEY_EMAIL_CODE_LIMIT = REDIS_KEY_PREFIX+"emailCodeLimit:";
 
     public static String REDIS_KEY_UPLOADING_FILE = REDIS_KEY_PREFIX+"uploadingFile:";
 

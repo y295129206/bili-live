@@ -56,9 +56,14 @@ const loadDataList = async () => {
     pageNo: dataSource.value.pageNo,
   }
   Object.assign(params, categoryIdInfo.value)
+  
+  // 判断是否带分类ID：如果 pCategoryId 和 categoryId 都为空，则使用个性化推荐接口
+  const hasCategory = categoryIdInfo.value.pCategoryId || categoryIdInfo.value.categoryId
+  const apiUrl = hasCategory ? proxy.Api.loadVideo : proxy.Api.getPersonalizedRecommendation
+  
   loadingData.value = true
   let result = await proxy.Request({
-    url: proxy.Api.loadVideo,
+    url: apiUrl,
     params,
   })
   loadingData.value = false

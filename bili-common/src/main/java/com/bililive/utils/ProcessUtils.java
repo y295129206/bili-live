@@ -27,7 +27,7 @@ public class ProcessUtils {
             
             log.info("执行命令：{}", command);
             
-            ProcessBuilder processBuilder = new ProcessBuilder("cmd", "/c", command);
+            ProcessBuilder processBuilder = new ProcessBuilder("/bin/sh", "-c", command);
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
             

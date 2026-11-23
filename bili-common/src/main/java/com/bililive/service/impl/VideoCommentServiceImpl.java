@@ -1,6 +1,7 @@
 package com.bililive.service.impl;
 
 import com.bililive.Enum.UserActionTypeEnum;
+import com.bililive.mapper.UserActionMapper;
 import com.bililive.mapper.UserInfoMapper;
 import com.bililive.mapper.VideoInfoMapper;
 import com.bililive.pojo.*;
@@ -30,6 +31,8 @@ public class VideoCommentServiceImpl implements VideoCommentService {
     private UserInfoMapper userInfoMapper;
     @Autowired
     private VideoInfoMapper videoInfoMapper;
+    @Autowired
+    private UserActionMapper userActionMapper;
 
     @Override
     public void postComment(VideoComment videoComment, Integer replyCommentId) {
@@ -60,6 +63,16 @@ public class VideoCommentServiceImpl implements VideoCommentService {
         videoComment.setPostTime(new Date());
         videoComment.setVideoUserId(videoInfo.getUserId());
         videoCommentMapper.insert(videoComment);
+        UserAction userAction = new UserAction();
+        userAction.setCommentId(0);
+        userAction.setUserId(videoComment.getUserId());
+        userAction.setVideoId(videoComment.getVideoId());
+        userAction.setVideoUserId(videoComment.getVideoUserId());
+        userAction.setActionTime(videoComment.getPostTime());
+        userAction.setActionType(UserActionTypeEnum.VIDEO_COMMENT.getType());
+        userAction.setActionCount(1);
+        userAction.setVideoUserId(videoInfo.getUserId());
+        userActionMapper.insert(userAction);
         videoInfoMapper.updateCountInfo(videoInfo.getVideoId(), UserActionTypeEnum.VIDEO_COMMENT.getField(),1);
     }
 

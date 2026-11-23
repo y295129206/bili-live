@@ -5,11 +5,9 @@ import com.bililive.Enum.VideoStatusEnum;
 import com.bililive.annotation.GlobalInterceptor;
 import com.bililive.component.RedisComponent;
 import com.bililive.entity.constants.Constants;
-import com.bililive.pojo.PaginationResult;
-import com.bililive.pojo.Result;
-import com.bililive.pojo.TokenUserInfoDto;
-import com.bililive.pojo.VideoInfoPostQuery;
+import com.bililive.pojo.*;
 import com.bililive.service.VideoInfoFilePostService;
+import com.bililive.service.VideoInfoFileService;
 import com.bililive.service.VideoInfoPostService;
 import com.bililive.service.VideoInfoService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @RestController
 @RequestMapping("/videoInfo")
@@ -31,6 +30,8 @@ public class VideoInfoController {
     private VideoInfoPostService videoInfoPostService;
     @Autowired
     private VideoInfoService videoInfoService;
+    @Autowired
+    private VideoInfoFileService videoInfoFileService;
 
     @RequestMapping("/loadVideoList")
     public Result<PaginationResult> loadVideoList(VideoInfoPostQuery videoInfoPostQuery) {
@@ -55,5 +56,13 @@ public class VideoInfoController {
     public Result<String> deleteVideo(@NotEmpty String videoId) {
         videoInfoService.deleteVideo(videoId,null);
         return Result.success("删除成功");
+    }
+    @RequestMapping("/loadVideoPList")
+    public Result<List<VideoInfoFile>> loadVideoList(@NotEmpty String videoId) {
+        VideoInfoFileQuery videoInfoFileQuery = new VideoInfoFileQuery();
+        videoInfoFileQuery.setVideoId(videoId);
+        videoInfoFileQuery.setOrderBy("file_index asc");
+        List<VideoInfoFile> videoInfoFileList = videoInfoFileService.findListByParam(videoInfoFileQuery);
+        return Result.success(videoInfoFileList);
     }
 }

@@ -34,6 +34,23 @@ spring:
         max-idle: 10
         min-idle: 0
     timeout: 2000
+  # 邮件发送（配置与 bili-web 保持一致，避免后台模块缺配置）
+  # password 为 QQ 邮箱授权码，可用环境变量 MAIL_PASSWORD 覆盖（已填入，换码无需改代码）
+  mail:
+    host: smtp.qq.com
+    port: 465
+    protocol: smtps
+    username: 2918971631@qq.com
+    password: ${MAIL_PASSWORD:bammsncibcyzdfej}
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+          auth: true
+          starttls:
+            enable: false
 #mybatis 大小写转驼峰
 mybatis:
   configuration:

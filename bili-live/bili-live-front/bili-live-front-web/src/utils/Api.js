@@ -2,6 +2,7 @@ import Request from "./Request";
 //单服务版本
 const Api = {
     checkCode: "/account/checkCode",
+    sendEmailCode: "/account/sendEmailCode",
     login: "/account/login",
     logout: "/account/logout",
     register: "/account/register",
@@ -32,6 +33,7 @@ const Api = {
     //获取视频列表
     loadRecommendVideo: "/video/loadRecommendVideo",
     loadVideo: "/video/loadVideo",
+    getPersonalizedRecommendation: "/recommendation/getPersonalizedRecommendation",
     loadVideoPList: "/video/loadVideoPList",
     getVideoResource: "/api/file/videoResource",
     getVideoInfo: "/video/getVideoInfo",

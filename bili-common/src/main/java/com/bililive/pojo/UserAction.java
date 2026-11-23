@@ -37,7 +37,7 @@ public class UserAction implements Serializable {
     /**
      * 行为数量（如投币数量、点赞次数等）
      */
-    private Integer actionCount;
+    private Integer actionCount = 1;
 
     /**
      * 评论 ID（当行为类型为评论相关时填写）
